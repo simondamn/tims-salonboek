@@ -1,0 +1,29 @@
+{
+ "name": "Tims Hondentrimsalon",
+ "short_name": "Tims",
+ "description": "Je afspraken, producten en contact met Tims Hondentrimsalon",
+ "lang": "nl",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#F8F6EC",
+ "theme_color": "#D1987D",
+ "icons": [
+  {
+   "src": "../icons/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "../icons/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "../icons/maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}
