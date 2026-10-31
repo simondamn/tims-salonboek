@@ -194,6 +194,29 @@ textarea.inp{min-height:84px;resize:vertical}
 .bar-l{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:6px;padding:4px 4px 0;font-size:13px;font-weight:800;color:var(--muted);text-align:center}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:15px;color:var(--muted);font-weight:700}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.wk-d{border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:6px 2px 4px;display:grid;justify-items:center;gap:1px;position:relative;min-height:66px}
+.wk-d small{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.wk-d b{font-family:var(--f-display);font-size:21px;line-height:1.1}
+.wk-d i{display:block;width:70%;height:5px;border-radius:3px;background:linear-gradient(90deg,var(--rose) calc(var(--v)*100%),var(--surface-2) 0)}
+.wk-d em{font-style:normal;font-size:11px;font-weight:800;color:var(--muted);min-height:13px}
+.wk-d.nu b{color:var(--wine)}
+.wk-d.sel{background:var(--wine);border-color:var(--wine);color:var(--cream)}
+.wk-d.sel small,.wk-d.sel em{color:var(--cream)}
+.wk-d.sel b{color:var(--cream)}
+.tl{position:relative;cursor:copy;user-select:none;-webkit-user-select:none}
+.tl-u{position:absolute;left:0;right:0;border-top:1px solid var(--line);height:0}
+.tl-u span{position:absolute;left:0;top:-9px;font-size:12px;font-weight:700;color:var(--muted);background:var(--surface);padding-right:4px}
+.tl-nu{position:absolute;left:40px;right:0;border-top:2px solid var(--bad);z-index:3}
+.tl-nu::before{content:"";position:absolute;left:-5px;top:-5px;width:8px;height:8px;border-radius:50%;background:var(--bad)}
+.tl-e{position:absolute;z-index:2;border:0;border-left:4px solid var(--rose);background:var(--rose-soft);color:var(--rose-ink);border-radius:8px;padding:3px 6px;text-align:left;overflow:hidden;display:flex;flex-direction:column;line-height:1.15;cursor:pointer}
+.tl-e.app{border-left-color:var(--olive);background:var(--olive-soft);color:var(--olive-ink)}
+.tl-e.klaar{opacity:.55}
+.tl-e b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl-e span{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}
+.tl-v{position:absolute;z-index:4;left:46px;right:2px;border:2px dashed var(--wine);background:rgba(125,52,70,.10);border-radius:8px;padding:2px 6px;color:var(--wine);pointer-events:none;display:flex;flex-direction:column;line-height:1.15}
+.tl-v.bots{border-color:var(--bad);background:rgba(176,48,42,.14);color:var(--bad)}
+.tl-v b{font-size:14px}.tl-v span{font-size:12px;font-weight:700}
 .daygroup .dh{display:flex;justify-content:space-between;padding:10px 14px 4px;font-size:15px;font-weight:800;color:var(--muted)}
 .statgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .filters{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
@@ -318,7 +341,7 @@ const hondById = id => S.data.honden.find(h => h.id === id);
 const sortedRegs = () => S.data.registraties.slice().sort((a,b)=> (b.datum+b.id).localeCompare(a.datum+a.id));
 
 /* ============ Verbinding met de server ============ */
-const APP_VERSIE = '1.2.0';
+const APP_VERSIE = '1.2.1';
 const MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'gas' : (window.TIMS_PWA ? 'api' : 'demo');
 const IS_LIVE = MODE !== 'demo';
 const Conn = {
@@ -923,25 +946,95 @@ function samenvoegen(bron){
 }
 
 /* ============ AGENDA ============ */
+/* ============ AGENDA: dag- en weekoverzicht zoals Apple Agenda ============ */
+const AG = {
+  wk: {}, // weekStart -> {t, evs}
+  weekStart(iso){ const d = parseISO(iso); const w = (d.getDay() + 6) % 7; d.setDate(d.getDate() - w); return isoOf(d); },
+  async week(iso, vers){
+    const ws = this.weekStart(iso); const c = this.wk[ws];
+    if (c && !vers && Date.now() - c.t < 120000) return c.evs;
+    const evs = verrijk(await api.agenda(parseISO(ws).toISOString(), parseISO(addDays(ws, 7)).toISOString()));
+    this.wk[ws] = {t: Date.now(), evs}; return evs;
+  },
+  async dag(iso, vers){ return (await this.week(iso, vers)).filter(e => isoOf(new Date(e.start)) === iso).sort((a,b) => a.start.localeCompare(b.start)); },
+  leeg(){ this.wk = {}; },
+};
+const minVan = d => d.getHours()*60 + d.getMinutes();
+const hhmm = m => `${pad(Math.floor(m/60))}:${pad(m%60)}`;
+const evNaam = e => { const h = e.hondId ? hondById(e.hondId) : null; return h ? h.naam : e.titel; };
+/** Bouwt een dagkolom met uurlijnen; afspraken als blokken, naast elkaar als ze overlappen. */
+function tijdlijn(iso, evs, voorstel){
+  const PX = 1.15, items = evs.map(e => { const s = new Date(e.start), t = new Date(e.end); return {e, a:minVan(s), b:Math.max(minVan(s)+15, isoOf(t) === iso ? minVan(t) : 24*60)}; });
+  let van = 8*60, tot = 19*60;
+  items.forEach(x => { van = Math.min(van, Math.floor(x.a/60)*60); tot = Math.max(tot, Math.ceil(x.b/60)*60); });
+  if (voorstel){ van = Math.min(van, Math.floor(voorstel.a/60)*60); tot = Math.max(tot, Math.ceil(voorstel.b/60)*60); }
+  // kolommen voor overlap
+  items.sort((x,y) => x.a - y.a || y.b - x.b);
+  let groep = [], eind = -1; const groepen = [];
+  items.forEach(x => { if (x.a >= eind && groep.length){ groepen.push(groep); groep = []; } groep.push(x); eind = Math.max(eind, x.b); });
+  if (groep.length) groepen.push(groep);
+  groepen.forEach(g => { const kol = []; g.forEach(x => { let k = kol.findIndex(b => b <= x.a); if (k < 0){ k = kol.length; kol.push(0); } kol[k] = x.b; x.k = k; }); g.forEach(x => x.n = kol.length); });
+  const nu = new Date(); const nuMin = isoOf(nu) === iso ? minVan(nu) : null;
+  const uren = []; for (let m = van; m <= tot; m += 60) uren.push(m);
+  const botst = voorstel ? items.filter(x => x.a < voorstel.b && x.b > voorstel.a) : [];
+  return `<div class="tl" data-tl="${iso}" data-van="${van}" style="height:${(tot-van)*PX}px">
+    ${uren.map(m => `<div class="tl-u" style="top:${(m-van)*PX}px"><span>${hhmm(m)}</span></div>`).join('')}
+    ${nuMin != null && nuMin >= van && nuMin <= tot ? `<div class="tl-nu" style="top:${(nuMin-van)*PX}px"></div>` : ''}
+    ${items.map(x => { const h = x.e.hondId ? hondById(x.e.hondId) : null; const klaar = S.data.registraties.some(r => r.afspraakId === x.e.id);
+      return `<button class="tl-e ${x.e.bron === 'app' ? 'app' : ''} ${klaar ? 'klaar' : ''}" data-tle="${esc(x.e.id)}" style="top:${(x.a-van)*PX}px;height:${Math.max(22,(x.b-x.a)*PX-2)}px;left:calc(46px + (100% - 50px) * ${x.k}/${x.n});width:calc((100% - 50px) / ${x.n} - 3px)">
+        <b>${esc(evNaam(x.e))}${h && h.gedrag === 'bijt' ? ' ⚠︎' : ''}</b><span>${hhmm(x.a)}–${hhmm(x.b)}${h && h.eigenaar ? ' · ' + esc(h.eigenaar) : ''}</span></button>`; }).join('')}
+    ${voorstel ? `<div class="tl-v ${botst.length ? 'bots' : ''}" style="top:${(voorstel.a-van)*PX}px;height:${Math.max(22,(voorstel.b-voorstel.a)*PX-2)}px"><b>${esc(voorstel.naam || 'Nieuwe afspraak')}</b><span>${hhmm(voorstel.a)}–${hhmm(voorstel.b)}</span></div>` : ''}
+  </div>`;
+}
+/** Tik op een lege plek in de tijdlijn: geeft het kwartier terug. */
+function tlTik(root, cb){
+  $$('.tl', root).forEach(tl => tl.addEventListener('click', ev => {
+    if (ev.target.closest('.tl-e')) return;
+    const r = tl.getBoundingClientRect(); const m = +tl.dataset.van + (ev.clientY - r.top) / 1.15;
+    cb(tl.dataset.tl, Math.max(0, Math.min(23*60+45, Math.round(m/15)*15)));
+  }));
+}
+/** Weekstrook met per dag de drukte (aantal afspraken en geplande uren). */
+function weekStrook(ws, evs, gekozen, attr){
+  const dagen = Array.from({length:7}, (_,i) => addDays(ws, i)); const vandaag = todayISO();
+  return `<div class="wk">${dagen.map(d => { const L = evs.filter(e => isoOf(new Date(e.start)) === d); const min = L.reduce((s,e) => s + (new Date(e.end) - new Date(e.start))/60000, 0);
+    const vol = Math.min(1, min / (9*60));
+    return `<button class="wk-d ${d === gekozen ? 'sel' : ''} ${d === vandaag ? 'nu' : ''}" ${attr}="${d}"><small>${esc(nlDag(d,{weekday:'short'}).replace('.',''))}</small><b>${parseISO(d).getDate()}</b><i style="--v:${vol}"></i><em>${L.length || ''}</em></button>`; }).join('')}</div>`;
+}
 async function viewAgenda(el){
-  const d = todayISO(), days = 28;
   const icl = !!S.data.instellingen.icloudLink;
-  el.innerHTML = `<div class="stack"><div class="sec-h"><h2>Agenda</h2><span class="meta">komende 4 weken</span></div>
-    <button class="btn btn-o" id="a-plan">+ Afspraak plannen</button>
-    ${icl ? '' : `<div class="card pad stack" style="gap:6px"><b>Koppel je Apple Agenda</b><p class="hint" style="margin:0">Dan zie je hier ook alle afspraken die je in Apple Agenda zet. Instellingen → Apple Agenda.</p><button class="btn btn-s btn-sm" id="a-kop" style="align-self:flex-start">Nu koppelen</button></div>`}
-    <div id="a-list" class="stack"><div class="card"><div class="empty">Agenda laden…</div></div></div></div>`;
-  $('#a-plan').onclick = () => openPlan({});
+  if (!S.agDag || Date.now() - (S.agDagT || 0) > 3600000) S.agDag = todayISO();
+  S.agDagT = Date.now();
+  const eersteKeer = S._agGezien !== S.agDag; S._agGezien = S.agDag;
+  const ws = AG.weekStart(S.agDag);
+  el.innerHTML = `<div class="stack">
+    <div class="sec-h"><h2>${esc(cap(parseISO(S.agDag).toLocaleDateString('nl-NL',{month:'long', year:'numeric'})))}</h2><span class="btnrow"><button class="btn btn-s btn-sm" id="a-vorige" aria-label="Vorige week">‹</button><button class="btn btn-s btn-sm" id="a-vandaag">Vandaag</button><button class="btn btn-s btn-sm" id="a-volgende" aria-label="Volgende week">›</button></span></div>
+    ${icl ? '' : `<div class="card pad stack" style="gap:6px"><b>Koppel je Apple Agenda</b><p class="hint" style="margin:0">Dan zie je hier ook alle afspraken die je in Apple Agenda zet.</p><button class="btn btn-s btn-sm" id="a-kop" style="align-self:flex-start">Nu koppelen</button></div>`}
+    <div id="a-week">${weekStrook(ws, [], S.agDag, 'data-agd')}</div>
+    <div class="card pad stack" style="gap:8px"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><b style="font-size:19px">${esc(cap(nlDag(S.agDag,{weekday:'long', day:'numeric', month:'long'})))}</b><span class="meta hint" id="a-meta" style="margin:0"></span></div>
+      <div id="a-dag"><div class="empty">Agenda laden…</div></div>
+      <p class="hint" style="margin:0">Tik op een lege plek om daar een afspraak te plannen.</p></div>
+    <button class="btn btn-o" id="a-plan">+ Afspraak plannen</button></div>`;
+  const ga = d => { S.agDag = d; viewAgenda(el); };
+  $('#a-vorige').onclick = () => ga(addDays(S.agDag, -7));
+  $('#a-volgende').onclick = () => ga(addDays(S.agDag, 7));
+  $('#a-vandaag').onclick = () => ga(todayISO());
+  $('#a-plan').onclick = () => openPlan({datum: S.agDag >= todayISO() ? S.agDag : ''});
   const ak = $('#a-kop'); if (ak) ak.onclick = () => openSettings('agenda');
   try {
-    const evs = verrijk(await api.agenda(parseISO(d).toISOString(), parseISO(addDays(d, days)).toISOString()));
-    if (S.view !== 'agenda') return;
+    const evs = await AG.week(S.agDag, true);
+    if (S.view !== 'agenda' || AG.weekStart(S.agDag) !== ws) return;
     S.agendaLast = evs;
-    const by = {}; evs.forEach(e => (by[isoOf(new Date(e.start))] ||= []).push(e));
-    const keys = Object.keys(by).sort();
-    $('#a-list').innerHTML = keys.length ? keys.map(k => `<div class="card daygroup"><div class="dh"><span>${k===d?'Vandaag · ':''}${esc(k===d?nlDag(k,{weekday:'long',day:'numeric',month:'long'}):cap(nlDag(k,{weekday:'long',day:'numeric',month:'long'})))}</span><span>${by[k].length}</span></div><div class="list">${by[k].map(evRowA).join('')}</div></div>`).join('')
-      : `<div class="card"><div class="empty"><b>Nog niks gepland</b>Plan een afspraak, of herhaal hem meteen voor de komende keren.</div></div>`;
-    $$('[data-eva]', el).forEach(b => b.onclick = () => evOpties(evs.find(e => e.id === b.dataset.eva)));
-  } catch(e){ const al = $('#a-list'); if (al) al.innerHTML = `<div class="card"><div class="empty">${e.net ? 'Geen internet: de agenda kan nu niet laden.' : 'Agenda kon niet laden: ' + esc(e.message)}</div></div>`; }
+    const dag = evs.filter(e => isoOf(new Date(e.start)) === S.agDag).sort((a,b) => a.start.localeCompare(b.start));
+    $('#a-week').innerHTML = weekStrook(ws, evs, S.agDag, 'data-agd');
+    $('#a-meta').textContent = dag.length ? `${dag.length} afspra${dag.length > 1 ? 'ken' : 'ak'}` : 'vrij';
+    $('#a-dag').innerHTML = tijdlijn(S.agDag, dag);
+    $$('[data-agd]', el).forEach(b => b.onclick = () => ga(b.dataset.agd));
+    $$('[data-tle]', el).forEach(b => b.onclick = () => evOpties(evs.find(e => e.id === b.dataset.tle)));
+    tlTik(el, (d, m) => { if (d < todayISO()) return toast('Die dag is al geweest'); openPlan({datum: d, tijd: hhmm(m)}); });
+    // 5: alleen bij het openen naar 'nu' scrollen, niet bij elke verversing
+    const nu = $('.tl-nu', el); if (nu && eersteKeer) nu.scrollIntoView({block:'center'});
+  } catch(e){ const ad = $('#a-dag'); if (ad) ad.innerHTML = `<div class="empty">${e.net ? 'Geen internet: de agenda kan nu niet laden.' : 'Agenda kon niet laden: ' + esc(e.message)}</div>`; }
 }
 function evRowA(e){
   const h = e.hondId ? hondById(e.hondId) : null;
@@ -961,7 +1054,7 @@ function evOpties(e){
   $('#ev-reg').onclick = () => afrekenen(e);
   const dl = $('#ev-del'); if (dl) dl.onclick = () => { $('#ev-del-box').innerHTML = `<div class="card pad stack"><b>Afspraak uit de agenda halen?</b><div class="btnrow"><button class="btn btn-d" id="ev-del2">Ja, verwijderen</button><button class="btn btn-s" id="ev-del0">Nee</button></div></div>`;
     $('#ev-del0').onclick = () => evOpties(e);
-    $('#ev-del2').onclick = async () => { try { await api.deleteAfspraak(e.id); closeSheet(); toast('Afspraak verwijderd'); render(); } catch(err){ fail(err); } }; };
+    $('#ev-del2').onclick = async () => { try { await api.deleteAfspraak(e.id); AG.leeg(); closeSheet(); toast('Afspraak verwijderd'); render(); } catch(err){ fail(err); } }; };
 }
 function openPlan(opts){
   const P = {hondId:opts.hondId||'', datum:opts.datum||addDays(todayISO(),1), tijd:opts.tijd||'09:00', duur:90, herhaal:0, aantal:3, zoek:opts.zoek||''};
@@ -974,6 +1067,8 @@ function openPlan(opts){
     $('#planform').innerHTML = `${h ? `<div class="dogcard"><div class="hd"><span class="av">${esc(ini(h.naam))}</span><div style="flex:1;min-width:0"><div class="n" style="font-size:22px">${esc(h.naam)} ${badge(h.gedrag)}</div><div class="muted" style="font-weight:700">${esc([h.ras,h.eigenaar].filter(Boolean).join(' · '))}</div></div><button class="btn btn-s btn-sm" id="p-wissel">Andere</button></div></div>`
       : `<div class="fld"><label for="p-zoek">Welke hond?</label><input class="inp" id="p-zoek" type="search" autocomplete="off" placeholder="Naam hond of eigenaar" value="${esc(P.zoek)}"><div class="results" id="p-res"></div></div>`}
       <div class="grid2"><div class="fld"><label for="p-datum">Datum</label><input class="inp" id="p-datum" type="date" value="${P.datum}"></div><div class="fld"><label for="p-tijd">Tijd</label><input class="inp" id="p-tijd" type="time" step="900" value="${P.tijd}"></div></div>
+      <div class="fld"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="lbl">Zo ziet die dag eruit</span><span class="btnrow"><button class="btn btn-s btn-sm" id="p-wv" aria-label="Week eerder">‹</button><button class="btn btn-s btn-sm" id="p-wn" aria-label="Week later">›</button></span></div><div id="p-week"></div><div id="p-bots"></div><div class="card pad" style="padding:10px 8px"><div id="p-dag"><div class="empty">Agenda laden…</div></div></div>
+        <p class="hint" style="margin:0">Tik op een lege plek om die tijd te kiezen. Het gestippelde blok is de nieuwe afspraak.</p></div>
       <div class="fld"><span class="lbl">Duur</span><div class="chips">${[30,60,90,120,150,180,210].map(m => `<button class="chip" data-pd="${m}" aria-pressed="${P.duur===m}">${durTxt(m)}</button>`).join('')}</div></div>
       <div class="fld"><span class="lbl">Herhalen?</span><div class="chips">${[[0,'Eenmalig'],[4,'Elke 4 wk'],[6,'Elke 6 wk'],[8,'Elke 8 wk'],[12,'Elke 12 wk']].map(([w,l]) => `<button class="chip" data-ph="${w}" aria-pressed="${P.herhaal===w}">${l}</button>`).join('')}</div>
       ${P.herhaal ? `<div class="chips">${[2,3,4,6].map(n => `<button class="chip" data-pa="${n}" aria-pressed="${P.aantal===n}">${n}× vooruit</button>`).join('')}</div><p class="hint">Plant ${P.aantal} afspraken: ${Array.from({length:P.aantal},(_,k)=>nlDag(addDays(P.datum,k*7*P.herhaal),{day:'numeric',month:'short'})).join(', ')}.</p>` : ''}</div>
@@ -985,20 +1080,57 @@ function openPlan(opts){
       z.oninput = () => { P.zoek = z.value; res(); }; res(); }
     const w = $('#p-wissel'); if (w) w.onclick = () => { P.hondId = ''; draw(); };
     $('#p-datum').onchange = e => { if (e.target.value){ P.datum = e.target.value; draw(); } };
-    $('#p-tijd').onchange = e => { P.tijd = e.target.value; };
+    $('#p-tijd').onchange = e => { P.tijd = e.target.value; toonDag(); };
+    $('#p-tijd').oninput = e => { if (/^\d{1,2}:\d{2}$/.test(e.target.value)){ P.tijd = e.target.value; toonDag(); } };
+    $('#p-wv').onclick = () => { const d = addDays(P.datum, -7); P.datum = d < todayISO() ? todayISO() : d; draw(); };
+    $('#p-wn').onclick = () => { P.datum = addDays(P.datum, 7); draw(); };
+    toonDag();
     $$('[data-pd]').forEach(b => b.onclick = () => { P.duur = +b.dataset.pd; draw(); });
     $$('[data-ph]').forEach(b => b.onclick = () => { P.herhaal = +b.dataset.ph; draw(); });
     $$('[data-pa]').forEach(b => b.onclick = () => { P.aantal = +b.dataset.pa; draw(); });
   };
+  let botsingen = [], bevestigd = false, laden = null;
+  function toonDag(){ laden = laadDag(); return laden; }
+  async function laadDag(){
+    const box = $('#p-dag'); if (!box) return;
+    const h = P.hondId ? hondById(P.hondId) : null;
+    const [hh, mm] = (P.tijd || '09:00').split(':').map(Number); const a = hh*60 + mm;
+    const voorstel = {a, b:a + P.duur, naam: h ? h.naam : 'Nieuwe afspraak'};
+    const datum = P.datum;
+    try {
+      const weekEvs = await AG.week(datum);
+      if (!$('#p-dag') || P.datum !== datum) return;
+      const dag = weekEvs.filter(e => isoOf(new Date(e.start)) === datum).sort((x,y) => x.start.localeCompare(y.start));
+      $('#p-week').innerHTML = weekStrook(AG.weekStart(datum), weekEvs, datum, 'data-pwd');
+      $$('[data-pwd]').forEach(b => b.onclick = () => { if (b.dataset.pwd < todayISO()) return toast('Die dag is al geweest'); P.datum = b.dataset.pwd; draw(); });
+      box.innerHTML = tijdlijn(datum, dag, voorstel);
+      tlTik(box, (d, m) => { if (d < todayISO()) return; P.tijd = hhmm(m); const t = $('#p-tijd'); if (t) t.value = P.tijd; toonDag(); });
+      const v = $('.tl-v', box); if (v) v.scrollIntoView({block:'nearest'});
+      // botsingen, ook voor de herhaalafspraken
+      const n = P.herhaal ? P.aantal : 1; botsingen = []; bevestigd = false;
+      for (let k = 0; k < n; k++){
+        const d = addDays(datum, k*7*P.herhaal);
+        const L = k === 0 ? dag : await AG.dag(d);
+        L.filter(e => { const s = new Date(e.start), t = new Date(e.end); const ea = minVan(s), eb = isoOf(t) === d ? minVan(t) : 1440; return ea < voorstel.b && eb > voorstel.a; })
+          .forEach(e => botsingen.push({d, e}));
+      }
+      if (P.datum !== datum || !$('#p-bots')) return;
+      $('#p-bots').innerHTML = botsingen.length ? `<div class="card pad" style="border-color:var(--bad);background:var(--bad-soft);color:var(--bad);font-weight:700">Let op: dit valt samen met ${botsingen.map(x => `${esc(evNaam(x.e))} (${esc(nlDag(x.d,{weekday:'short', day:'numeric', month:'short'}))} ${evTijd(x.e)})`).join(', ')}.</div>` : `<div class="hint" style="margin:0;color:var(--ok);font-weight:700">✓ Dit tijdstip is vrij${n > 1 ? ' voor alle ' + n + ' afspraken' : ''}.</div>`;
+    } catch(e){ if ($('#p-dag')) $('#p-dag').innerHTML = `<div class="empty">${e.net ? 'Geen internet: de agenda van die dag kan nu niet laden.' : 'Agenda kon niet laden.'}</div>`; }
+  }
   draw();
   $('#p-save').onclick = async () => {
     if (!P.hondId) return toast('Kies eerst een hond');
+    if (P.datum < todayISO()) return toast('Kies een datum vanaf vandaag');
+    if (laden){ const k = $('#p-save'); k.disabled = true; try { await laden; } catch(e){} k.disabled = false; }
+    if (botsingen.length && !bevestigd){ bevestigd = true; const b = $('#p-bots'); if (b) b.scrollIntoView({block:'center'}); return toast('Dit tijdstip is al bezet. Tik nog een keer op "Zet in agenda" om toch te plannen.'); }
     if (!/^\d{1,2}:\d{2}$/.test(P.tijd || '')) return toast('Kies een tijd');
     const h = hondById(P.hondId); const [hh, mm] = P.tijd.split(':').map(Number);
     const n = P.herhaal ? P.aantal : 1;
     const starts = Array.from({length:n}, (_,k) => { const s = parseISO(addDays(P.datum, k*7*P.herhaal)); s.setHours(hh, mm, 0, 0); return s.toISOString(); });
     const btn = $('#p-save'); btn.disabled = true; btn.textContent = 'Bezig…';
     try { await api.plan({hondId:h.id, titel:planTitel(h), beschrijving:[h.ras, h.gedrag==='bijt'?'LET OP: kan bijten':'', h.telefoon].filter(Boolean).join(' · '), starts, duur:P.duur});
+      AG.leeg();
       if (aanvraagId) Q.push('aanvraagStatus', {id:aanvraagId, status:'ingepland'});
       closeSheet(); toast(`${n} afspra${n>1?'ken':'ak'} gepland ✓`); render(); } catch(e){ btn.disabled = false; btn.textContent = 'Zet in agenda'; fail(e); }
   };
