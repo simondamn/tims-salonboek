@@ -223,7 +223,8 @@ body.koppel .tabs,body.koppel #btn-settings,body.koppel #btn-klant{display:none}
 .pthumb.big{width:96px;height:96px;font-size:30px;cursor:default}
 .chip small .op{color:var(--bad)}
 a.btn{text-decoration:none}
-.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:80;background:var(--wine);color:#FFF8F0;padding:12px 18px;border-radius:14px;font-weight:800;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+.toast .undo{margin-left:12px;border:0;border-radius:10px;background:#FFF8F0;color:var(--wine);font-weight:800;padding:6px 10px;font-size:15px}
+.toast{display:flex;align-items:center;gap:4px;position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:80;background:var(--wine);color:#FFF8F0;padding:12px 18px;border-radius:14px;font-weight:800;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
 .loading{display:grid;place-items:center;min-height:50vh;color:var(--muted);font-weight:700}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
@@ -285,7 +286,15 @@ const GEDRAG = {lief:'Lief', letop:'Let op', bijt:'Bijt'};
 const badge = g => g ? `<span class="badge b-${g}">${g==='bijt'?'⚠︎ ':''}${GEDRAG[g]}</span>` : '';
 const pays = () => (S.data && S.data.instellingen.betaalwijzen && S.data.instellingen.betaalwijzen.length) ? S.data.instellingen.betaalwijzen : ['contant','tikkie'];
 const payTxt = p => ({contant:'Contant', tikkie:'Tikkie', pin:'Pin'}[p] || p || '');
-function toast(msg){ const t = document.createElement('div'); t.className='toast'; t.setAttribute('role','status'); t.textContent = msg; document.body.appendChild(t); setTimeout(()=>t.remove(), 2600); }
+function toast(msg){
+  $$('.toast').forEach(x => x.remove());
+  const t = document.createElement('div'); t.className='toast'; t.setAttribute('role','status');
+  const g = Undo.kandidaat();
+  t.innerHTML = `<span>${esc(msg)}</span>${g ? '<button type="button" class="undo">Ongedaan maken</button>' : ''}`;
+  document.body.appendChild(t);
+  if (g) t.querySelector('.undo').onclick = () => { t.remove(); Undo.doe(g); };
+  setTimeout(()=>t.remove(), g ? 8000 : 2600);
+}
 function fail(e){ console.error(e); toast('Dat lukte niet: ' + (e && e.message ? e.message : 'controleer je internet')); }
 const store = { get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } }, set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } } };
 
@@ -406,6 +415,7 @@ function applyOp(data, a, d){
     if (w !== null && nu !== null && d.basis != null) w = Math.max(0, w + (nu - +d.basis)); p.voorraad = w; } }
   else if (a === 'bestellingStatus'){ const b = data.bestellingen.find(x => x.id === d.id); if (b){
     if (d.status === 'geannuleerd' && b.status !== 'geannuleerd' && b.status !== 'opgehaald') (b.items||[]).forEach(it => { const p = data.producten.find(x => x.id === it.id); if (p && p.voorraad != null) p.voorraad = +p.voorraad + (+it.aantal||1); });
+    if (b.status === 'geannuleerd' && d.status !== 'geannuleerd') (b.items||[]).forEach(it => { const p = data.producten.find(x => x.id === it.id); if (p && p.voorraad != null) p.voorraad = Math.max(0, +p.voorraad - (+it.aantal||1)); });
     b.status = d.status; if (d.regId) b.regId = d.regId; } }
   else if (a === 'aanvraagStatus'){ const x = data.aanvragen.find(y => y.id === d.id); if (x) x.status = d.status; }
   else if (a === 'saveHond') up(data.honden, JSON.parse(JSON.stringify(d)));
@@ -413,10 +423,43 @@ function applyOp(data, a, d){
   else if (a === 'saveProducten'){ const oud = data.producten; data.producten = JSON.parse(JSON.stringify(d.list)).map(p => { const o = oud.find(x => x.id === p.id); return o ? {...p, voorraad:o.voorraad, foto:o.foto} : p; }); }
   else if (a === 'saveInstellingen') data.instellingen = JSON.parse(JSON.stringify(d.obj));
 }
+/* ---- Ongedaan maken: elke wijziging (of groep wijzigingen in één tik) kan met één tik terug ---- */
+const Undo = {
+  groep: null, laatste: null, bezig: false,
+  voor(a){
+    if (this.bezig || !S.data) return;
+    if (!this.groep){ this.groep = {snap: JSON.parse(JSON.stringify(S.data)), t: Date.now()}; setTimeout(() => { this.laatste = this.groep; this.groep = null; }, 0); }
+  },
+  kandidaat(){ const g = this.groep || this.laatste; return g && Date.now() - g.t < 1500 && !this.bezig ? g : null; },
+  doe(g){
+    const oud = g.snap, nu = S.data; this.bezig = true; let n = 0;
+    const push = (a, d) => { Q.push(a, d); n++; };
+    const lijst = (k, save, del) => {
+      const o = new Map((oud[k]||[]).map(x => [x.id, x])), c = new Map((nu[k]||[]).map(x => [x.id, x]));
+      for (const [id, x] of o){ const y = c.get(id); if (!y || JSON.stringify(x) !== JSON.stringify(y)) push(save, JSON.parse(JSON.stringify(x))); }
+      for (const id of c.keys()) if (!o.has(id)) push(del, {id});
+    };
+    try {
+      lijst('honden', 'saveHond', 'deleteHond');
+      lijst('registraties', 'saveReg', 'deleteReg');
+      for (const b of (oud.bestellingen||[])){ const y = (S.data.bestellingen||[]).find(x => x.id === b.id); if (y && y.status !== b.status) push('bestellingStatus', {id:b.id, status:b.status}); }
+      for (const a of (oud.aanvragen||[])){ const y = (S.data.aanvragen||[]).find(x => x.id === a.id); if (y && y.status !== a.status) push('aanvraagStatus', {id:a.id, status:a.status}); }
+      const zonder = p => { const {voorraad, foto, fotoData, ...r} = p; return JSON.stringify(r); };
+      for (const p of (oud.producten||[])){ const y = S.data.producten.find(x => x.id === p.id);
+        if (!y){ push('saveProduct', JSON.parse(JSON.stringify(p))); continue; }
+        if (zonder(p) !== zonder(y)) push('saveProduct', JSON.parse(JSON.stringify(p)));
+        const vo = p.voorraad == null ? null : +p.voorraad, vn = y.voorraad == null ? null : +y.voorraad;
+        if (vo !== vn) push('voorraad', {id:p.id, waarde:vo, basis:vn}); }
+      for (const p of S.data.producten.slice()) if (!(oud.producten||[]).some(x => x.id === p.id)) push('deleteProduct', {id:p.id});
+      if (JSON.stringify(oud.instellingen) !== JSON.stringify(S.data.instellingen)) push('saveInstellingen', {obj: JSON.parse(JSON.stringify(oud.instellingen))});
+    } finally { this.bezig = false; }
+    this.laatste = null; closeSheet(); render(); toast(n ? 'Ongedaan gemaakt ✓' : 'Er was niets om terug te zetten');
+  },
+};
 const Q = {
   items(){ return store.get(KEY_Q, []); },
   save(l){ if (!store.set(KEY_Q, l)) toast('Let op: opslaan op dit apparaat lukt niet. Houd de app open tot alles verstuurd is.'); },
-  push(a, d){ const l = this.items(); l.push({q: uid('q'), a, d, t: Date.now()}); this.save(l); applyOp(S.data, a, d); cacheSave(); buildIndex(); syncSoon(150); setStatus(); },
+  push(a, d){ Undo.voor(a); const l = this.items(); l.push({q: uid('q'), a, d, t: Date.now()}); this.save(l); applyOp(S.data, a, d); cacheSave(); buildIndex(); syncSoon(150); setStatus(); },
 };
 function cacheSave(){ if (S.data) store.set(KEY_CACHE, S.data); }
 let syncBusy = false, syncTimer = null, syncDelay = 2000, syncErr = null;
@@ -770,12 +813,14 @@ function saveReg(){
   if (nieuw && trim && h) naOpslaan(r, h); else toast(`Opgeslagen ✓ ${r.hond || 'verkoop'} · ${eur(r.totaal)}`);
 }
 function naOpslaan(r, h){
+  const ug = Undo.kandidaat();
   const i = S.idx[h.id]; const wk = i && i.interval ? Math.max(2, Math.round(i.interval/7)) : 6;
   const opties = [...new Set([4, 6, 8, wk])].sort((a,b)=>a-b);
   sheet('Opgeslagen ✓', `<div class="card pad stack" style="gap:4px"><div style="font-family:var(--f-display);font-size:28px;font-weight:800;color:var(--wine)">${esc(h.naam)} · ${eur(r.totaal)}</div><div class="hint">${payTxt(r.betaal)}${r.duur ? ' · ' + durTxt(r.duur) : ''}${r.opmerking ? ' · ' + esc(r.opmerking) : ''}</div></div>
     <div class="fld"><span class="lbl">Volgende afspraak inplannen?</span><div class="chips">${opties.map(w => `<button class="chip" data-nw="${w}"><span>Over ${w} weken${w===wk && i && i.interval ? ' ★' : ''}</span><small>${esc(nlDag(addDays(r.datum, w*7),{weekday:'short',day:'numeric',month:'short'}))}</small></button>`).join('')}</div>${i && i.interval ? `<p class="hint" style="margin:0">★ = hoe vaak ${esc(h.naam)} normaal komt.</p>` : ''}</div>`,
     `${salonInfo().reviewLink && h.telefoon ? `<button class="btn btn-s" id="na-review" style="flex:1">Vraag review</button>` : ''}<button class="btn btn-s" id="na-klaar" style="flex:1">Klaar</button>`);
   $('#na-klaar').onclick = closeSheet;
+  if (ug){ const box = document.createElement('button'); box.className = 'btn btn-s btn-sm'; box.style.alignSelf = 'flex-start'; box.textContent = 'Oeps, ongedaan maken'; box.onclick = () => Undo.doe(ug); $('.sheet-b').appendChild(box); }
   const nr = $('#na-review'); if (nr) nr.onclick = () => vraagReview(h);
   $$('[data-nw]').forEach(b => b.onclick = () => openPlan({hondId:h.id, datum:addDays(r.datum, (+b.dataset.nw)*7), tijd: F && F._tijd ? F._tijd : ''}));
 }
@@ -1119,7 +1164,7 @@ function zorgKlantcode(h){
   const eig = norm(h.eigenaar);
   const groep = eig ? S.data.honden.filter(x => norm(x.eigenaar) === eig && (!x.telefoon || !h.telefoon || telNorm(x.telefoon) === telNorm(h.telefoon))) : [h];
   const code = (groep.find(x => x.klantcode) || {}).klantcode || randomCode();
-  groep.forEach(x => { if (x.klantcode !== code) Q.push('saveHond', {...x, klantcode: code}); });
+  Undo.bezig = true; groep.forEach(x => { if (x.klantcode !== code) Q.push('saveHond', {...x, klantcode: code}); }); Undo.bezig = false;
   return code;
 }
 function salonInfo(){ return S.data.instellingen.salon || {}; }
@@ -1462,7 +1507,7 @@ function migreer(){
   const ins = S.data.instellingen; let veranderd = false;
   if (!ins._v2){ if (!ins.snitten.includes('Wasbeurt')) ins.snitten.splice(Math.min(6, ins.snitten.length), 0, 'Wasbeurt'); ins._v2 = true; veranderd = true; }
   if (!ins._v3){ ins._v3 = true; veranderd = true; }
-  if (veranderd) Q.push('saveInstellingen', {obj: ins});
+  if (veranderd){ Undo.bezig = true; Q.push('saveInstellingen', {obj: ins}); Undo.bezig = false; }
 }
 async function laadServer(){
   const data = normaliseer(await rpc('load'));
