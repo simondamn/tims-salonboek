@@ -1,5 +1,5 @@
 /* Tims Salonboek – service worker: app werkt ook bij slecht bereik en ververst zichzelf bij updates. */
-const VERSIE = 'klant-1.2.0';
+const VERSIE = 'klant-1.3.0';
 const CACHE = 'timsk-' + VERSIE;
 const SHELL = ['./', './index.html', './manifest.webmanifest', '../icons/icon-192.png', '../icons/icon-512.png', '../icons/apple-touch-icon.png', '../icons/favicon.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });

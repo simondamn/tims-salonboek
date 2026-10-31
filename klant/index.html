@@ -194,6 +194,29 @@ textarea.inp{min-height:84px;resize:vertical}
 .bar-l{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:6px;padding:4px 4px 0;font-size:13px;font-weight:800;color:var(--muted);text-align:center}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:15px;color:var(--muted);font-weight:700}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.wk-d{border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:6px 2px 4px;display:grid;justify-items:center;gap:1px;position:relative;min-height:66px}
+.wk-d small{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.wk-d b{font-family:var(--f-display);font-size:21px;line-height:1.1}
+.wk-d i{display:block;width:70%;height:5px;border-radius:3px;background:linear-gradient(90deg,var(--rose) calc(var(--v)*100%),var(--surface-2) 0)}
+.wk-d em{font-style:normal;font-size:11px;font-weight:800;color:var(--muted);min-height:13px}
+.wk-d.nu b{color:var(--wine)}
+.wk-d.sel{background:var(--wine);border-color:var(--wine);color:var(--cream)}
+.wk-d.sel small,.wk-d.sel em{color:var(--cream)}
+.wk-d.sel b{color:var(--cream)}
+.tl{position:relative;cursor:copy;user-select:none;-webkit-user-select:none}
+.tl-u{position:absolute;left:0;right:0;border-top:1px solid var(--line);height:0}
+.tl-u span{position:absolute;left:0;top:-9px;font-size:12px;font-weight:700;color:var(--muted);background:var(--surface);padding-right:4px}
+.tl-nu{position:absolute;left:40px;right:0;border-top:2px solid var(--bad);z-index:3}
+.tl-nu::before{content:"";position:absolute;left:-5px;top:-5px;width:8px;height:8px;border-radius:50%;background:var(--bad)}
+.tl-e{position:absolute;z-index:2;border:0;border-left:4px solid var(--rose);background:var(--rose-soft);color:var(--rose-ink);border-radius:8px;padding:3px 6px;text-align:left;overflow:hidden;display:flex;flex-direction:column;line-height:1.15;cursor:pointer}
+.tl-e.app{border-left-color:var(--olive);background:var(--olive-soft);color:var(--olive-ink)}
+.tl-e.klaar{opacity:.55}
+.tl-e b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl-e span{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}
+.tl-v{position:absolute;z-index:4;left:46px;right:2px;border:2px dashed var(--wine);background:rgba(125,52,70,.10);border-radius:8px;padding:2px 6px;color:var(--wine);pointer-events:none;display:flex;flex-direction:column;line-height:1.15}
+.tl-v.bots{border-color:var(--bad);background:rgba(176,48,42,.14);color:var(--bad)}
+.tl-v b{font-size:14px}.tl-v span{font-size:12px;font-weight:700}
 .daygroup .dh{display:flex;justify-content:space-between;padding:10px 14px 4px;font-size:15px;font-weight:800;color:var(--muted)}
 .statgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .filters{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
@@ -285,6 +308,14 @@ a.btn{text-decoration:none}
 .done h3{font-size:30px;color:var(--wine)}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#FFF8F0;border-radius:14px;padding:10px 16px;font-weight:700;z-index:80;max-width:calc(100% - 32px);text-align:center}
+.slotdag{padding:10px 14px;border-top:1px solid var(--line)}
+.slotdag:first-child{border-top:0}
+.slotdag .sd-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.slotdag .sd-h span{font-size:14px;font-weight:800;color:var(--olive-ink)}
+.slotdag.vol .sd-h b,.slotdag.vol .sd-h span{color:var(--muted);font-weight:700}
+.sd-t{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.slot{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:6px 10px;font-weight:800;font-size:16px;min-width:64px}
+.slot[aria-pressed="true"]{background:var(--wine);border-color:var(--wine);color:var(--cream)}
 .pill{display:inline-block;font-size:14px;font-weight:800;border-radius:999px;padding:2px 10px;background:var(--olive-soft);color:var(--olive-ink)}
 </style>
 <style>.top{top:0;padding-top:env(safe-area-inset-top,0px)}html,body{overscroll-behavior-y:none}</style>
@@ -363,6 +394,7 @@ function demoRpc(a, d){
       const b = {id:'b'+Date.now(), tijd:new Date().toISOString(), items:d.items.map(it => { const p = D.producten.find(x => x.id === it.id); return {id:it.id, naam:p.naam, prijs:p.prijs, aantal:it.aantal}; }), ophalen:d.ophalen, status:'nieuw'};
       b.totaal = r2(b.items.reduce((s,x) => s + x.prijs*x.aantal, 0)); if (D.klant) D.klant.bestellingen.push(b); return ok({id:b.id, totaal:b.totaal}); }
     if (a === 'aanvraag') return ok({id:'a'+Date.now()});
+    if (a === 'herinnering'){ if (D.klant) D.klant.herinnering = d.aan ? d.email : ''; return ok({herinnering: d.aan ? d.email : ''}); }
   }, 450));
 }
 
@@ -411,7 +443,7 @@ function agendaKeuze(e){
       <div class="card pad stack" style="gap:8px"><b>Nooit meer zelf overzetten?</b><p class="hint" style="margin:0">Abonneer je één keer: dan staan al je Tims-afspraken automatisch in je agenda, ook nieuwe en verzette.</p><button class="btn btn-s btn-sm" id="ag-feed" style="align-self:flex-start">Automatisch bijwerken</button></div>`
       : `<a class="btn btn-p" href="${esc(feedUrl())}" data-demo>Abonneer in Apple Agenda</a>
       <a class="btn btn-s" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(feedUrl())}" target="_blank" rel="noopener" data-demo>Abonneer in Google Agenda</a>
-      <p class="hint" style="margin:0">Je krijgt een dag van tevoren een herinnering.</p>`}`);
+      <p class="hint" style="margin:0">Je agenda geeft 2 dagen en 1 dag van tevoren een seintje.</p>`}`);
   const f = $('#ag-feed'); if (f) f.onclick = () => agendaKeuze(null);
   if (DEMO) $$('[data-demo]').forEach(a => a.onclick = ev => { ev.preventDefault(); toast('In de echte app opent dit je agenda'); });
 }
@@ -433,6 +465,7 @@ function viewHome(el){
         ${i === 0 ? `<div class="btnrow"><button class="btn btn-o btn-sm" data-ag="${esc(e.id)}" style="flex:1">Zet in je agenda</button><a class="btn btn-s btn-sm" href="${esc(waLink(s.telefoon, `Hoi Kim, over de afspraak van ${e.hond || 'mijn hond'} op ${nl(e.start, {weekday:'long', day:'numeric', month:'long'})}: `))}" target="_blank" rel="noopener" style="flex:1">Verzetten? App Kim</a></div>` : `<button class="btn btn-s btn-sm" data-ag="${esc(e.id)}" style="align-self:flex-start">Zet in je agenda</button>`}</div>`).join('')
       : `<div class="card pad stack" style="gap:10px"><b style="font-size:19px">Nog geen afspraak gepland</b>${honden.map(h => volgende(h)).filter(Boolean).join('')}<button class="btn btn-o" id="h-aanvraag">Afspraak aanvragen</button></div>`}
       ${nu.length ? `<button class="btn btn-s btn-sm" id="h-feed" style="align-self:flex-start">Alle afspraken automatisch in je agenda</button>` : ''}
+      ${herinnerKaart(k)}
       ${bst.length ? `<div class="sec-h"><h2>Je bestelling${bst.length > 1 ? 'en' : ''}</h2></div>${bst.map(b => `<div class="card pad stack" style="gap:6px"><div style="display:flex;justify-content:space-between;gap:8px"><b>${b.items.map(x => `${x.aantal}× ${esc(x.naam)}`).join(', ')}</b><span class="badge ${b.status === 'klaargelegd' ? 'b-done' : 'b-letop'}">${b.status === 'klaargelegd' ? 'ligt klaar' : 'gereserveerd'}</span></div><span class="hint" style="margin:0">${eur(b.totaal)} · ophalen: ${esc(b.ophalen || '')}</span></div>`).join('')}` : ''}
       ${honden.length ? `<div class="sec-h"><h2>${honden.length > 1 ? 'Jullie honden' : 'Jouw hond'}</h2></div><div class="card list">${honden.map(h => `<div class="row" style="cursor:default"><span class="av">${esc((h.naam || '?')[0].toUpperCase())}</span><span class="main"><span class="t1">${esc(h.naam)}</span><span class="t2">${esc([h.ras, h.laatst ? 'laatst ' + nl(h.laatst, {day:'numeric', month:'short'}) : ''].filter(Boolean).join(' · '))}</span></span>${h.bezoeken ? `<span class="pill">${h.bezoeken}× bij Tims</span>` : ''}</div>`).join('')}</div>` : ''}`
     : `<div class="grid"><button class="card pad stack" id="h-w" style="gap:6px;text-align:left"><span style="font-size:28px">🛍️</span><b style="font-size:19px">Producten</b><span class="hint" style="margin:0">Reserveer en haal op in de salon</span></button>
@@ -443,9 +476,26 @@ function viewHome(el){
   </div>`;
   $$('[data-ag]', el).forEach(b => b.onclick = () => agendaKeuze(nu.find(e => e.id === b.dataset.ag)));
   const on = (id, f) => { const x = $(id, el); if (x) x.onclick = f; };
+  bindHerinner(el);
   on('#h-feed', () => agendaKeuze(null)); on('#h-aanvraag', () => go('afspraak')); on('#h-w', () => go('winkel')); on('#h-a', () => go('afspraak'));
   on('#h-review', reviewVel); on('#h-pop', () => go('winkel'));
   bindInstall(el); bindProd(el);
+}
+function herinnerKaart(k){
+  if (!k || !('herinnering' in k)) return ''; // pas zichtbaar als de server herinneringen kent
+  if (k.herinnering) return `<div class="card pad" style="display:flex;gap:12px;align-items:center"><span style="font-size:24px">🔔</span><span style="flex:1"><b style="display:block">Herinnering staat aan</b><span class="hint" style="margin:0">2 dagen voor elke afspraak een mail naar ${esc(k.herinnering)}</span></span><button class="btn btn-s btn-sm" id="hr-uit">Uitzetten</button></div>`;
+  return `<div class="card pad stack" style="gap:10px;border-color:var(--olive)"><div style="display:flex;gap:12px;align-items:center"><span style="font-size:24px">🔔</span><span style="flex:1"><b style="display:block">Herinnering 2 dagen van tevoren?</b><span class="hint" style="margin:0">Dan krijg je voor elke afspraak een mailtje, zodat je hem nooit vergeet.</span></span></div>
+    <div style="display:flex;gap:8px"><input class="inp" id="hr-mail" type="email" autocomplete="email" inputmode="email" placeholder="jouw@email.nl" value="${esc(S.me.email || '')}" style="flex:1;min-width:0"><button class="btn btn-o" id="hr-aan">Aanzetten</button></div></div>`;
+}
+function bindHerinner(el){
+  const zet = async (aan, email, btn) => {
+    if (btn){ btn.disabled = true; btn.textContent = 'Bezig…'; }
+    try { const r = await rpc('herinnering', {aan, email}); S.data.klant.herinnering = r.herinnering; if (email){ S.me.email = email; store.set('tk_me', S.me); } store.set(KEY_CACHE + CODE, S.data);
+      toast(aan ? 'Herinnering staat aan ✓' : 'Herinnering staat uit'); render(); }
+    catch(e){ if (btn){ btn.disabled = false; btn.textContent = aan ? 'Aanzetten' : 'Uitzetten'; } toast(e.message); }
+  };
+  const a = $('#hr-aan', el); if (a) a.onclick = () => { const m = $('#hr-mail').value.trim(); if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(m)) return toast('Vul een geldig e-mailadres in'); zet(true, m, a); };
+  const u = $('#hr-uit', el); if (u) u.onclick = () => zet(false, '', u);
 }
 function volgende(h){
   if (!h.laatst || !h.interval) return '';
@@ -577,18 +627,49 @@ function cartVel(){
 function leesCo(){ const C = S._co; if (!C) return; const o = $('#co-opm'); if (o) C.opm = o.value; const n = $('#co-naam'), t = $('#co-tel'); if (n) S.me.naam = n.value; if (t) S.me.telefoon = t.value; }
 $('#cart-open').onclick = cartVel;
 
+/* ---- BESCHIKBAARHEID: vrije plekken uit Kims echte agenda (alleen vrij/bezet, nooit namen) ---- */
+const DIENST_DUUR = {'complete trimbeurt':90, 'doodle-beurt':120, 'puppybeurt':60, 'tussenbeurt':30, 'nagels knippen':15};
+function beurtDuur(A){
+  const k = klant(); const D = (S.data.diensten || []).find(d => d.naam === A.behandeling);
+  const vd = D && (D.duur || DIENST_DUUR[String(D.naam).toLowerCase()]);
+  const hd = ((k && k.honden) || []).filter(h => A.hond.includes(h.naam)).reduce((s, h) => s + (h.duur || 0), 0);
+  if (A.behandeling && /nagel|tussen/i.test(A.behandeling)) return vd || 30;
+  return Math.max(30, Math.ceil((hd || vd || 90) / 15) * 15);
+}
+function vrijePlekken(duur){
+  const B = S.data.beschikbaar; if (!B) return null;
+  const W = B.werk || {dagen:[1,2,3,4,5], van:'09:00', tot:'18:00'};
+  const [vh, vm] = W.van.split(':').map(Number), [th, tm] = W.tot.split(':').map(Number);
+  const stap = B.stap || 30, buf = B.buffer || 0;
+  const bezet = (B.bezet || []).map(([a, b]) => [a - buf*60000, b + buf*60000]);
+  const dagen = []; const start = new Date(); start.setHours(0,0,0,0); start.setDate(start.getDate() + (B.minDagen == null ? 1 : B.minDagen));
+  for (let i = 0; i < (B.weken || 8) * 7; i++){
+    const d = new Date(start); d.setDate(start.getDate() + i);
+    if (!W.dagen.includes(d.getDay())) continue;
+    const tijden = [];
+    for (let m = vh*60+vm; m + duur <= th*60+tm; m += stap){
+      const a = new Date(d); a.setHours(0, m, 0, 0); const b = a.getTime() + duur*60000;
+      if (!bezet.some(([x, y]) => x < b && y > a.getTime())) tijden.push(a);
+    }
+    dagen.push({d, tijden});
+  }
+  return dagen;
+}
+const tijdTxt = d => d.toLocaleTimeString('nl-NL', {hour:'2-digit', minute:'2-digit'});
+
 /* ---- AFSPRAAK AANVRAGEN ---- */
 function viewAfspraak(el){
-  const k = klant(), s = salon(), A = S._av || (S._av = {hond: ((k && k.honden) || []).map(h => h.naam).slice(0, 1), behandeling:'', wanneer:'', dagdeel:'', opm:'', hondTxt:''});
+  const k = klant(), s = salon(), A = S._av || (S._av = {hond: ((k && k.honden) || []).map(h => h.naam).slice(0, 1), behandeling:'', wanneer:'', dagdeel:'', opm:'', hondTxt:'', slots:[], week:null});
+  const duur = beurtDuur(A), plek = vrijePlekken(duur);
   const honden = (k && k.honden) || [], diensten = S.data.diensten || [];
   el.innerHTML = `<div class="stack">
     <div class="sec-h"><h2>Afspraak aanvragen</h2></div>
-    <p class="hint" style="margin:0">Laat weten wat je zoekt. Kim kijkt in haar agenda en appt je met een voorstel.</p>
+    <p class="hint" style="margin:0">${S.data.beschikbaar ? 'Kies wat er moet gebeuren en tik 1 tot 3 momenten aan die jou passen. Kim bevestigt de afspraak via WhatsApp.' : 'Laat weten wat je zoekt. Kim kijkt in haar agenda en appt je met een voorstel.'}</p>
     <div class="fld"><span class="lbl">Voor welke hond?</span>
       ${honden.length ? `<div class="chips">${honden.map(h => `<button class="chip" data-hd="${esc(h.naam)}" aria-pressed="${A.hond.includes(h.naam)}">${esc(h.naam)}</button>`).join('')}</div>` : `<input class="inp" id="av-hond" placeholder="Naam en ras, bv Bo, labradoodle" value="${esc(A.hondTxt)}">`}</div>
     ${diensten.length ? `<div class="fld"><span class="lbl">Wat mag er gebeuren?</span><div class="chips">${diensten.map(d => `<button class="chip" data-bh="${esc(d.naam)}" aria-pressed="${A.behandeling === d.naam}"><span>${esc(d.naam)}</span>${d.vanaf != null ? `<small>vanaf ${eur(d.vanaf)}</small>` : ''}</button>`).join('')}</div></div>` : ''}
-    <div class="fld"><span class="lbl">Wanneer ongeveer?</span><div class="chips">${['Zo snel mogelijk', 'Volgende week', 'Over 2 à 3 weken', 'Over een maand of later'].map(x => `<button class="chip" data-wn="${x}" aria-pressed="${A.wanneer === x}">${x}</button>`).join('')}</div>
-      <div class="chips">${['Ochtend', 'Middag', 'Maakt niet uit'].map(x => `<button class="chip" data-dd="${x}" aria-pressed="${A.dagdeel === x}">${x}</button>`).join('')}</div></div>
+    ${plek ? plekkenHtml(plek, A, duur) : `<div class="fld"><span class="lbl">Wanneer ongeveer?</span><div class="chips">${['Zo snel mogelijk', 'Volgende week', 'Over 2 à 3 weken', 'Over een maand of later'].map(x => `<button class="chip" data-wn="${x}" aria-pressed="${A.wanneer === x}">${x}</button>`).join('')}</div>
+      <div class="chips">${['Ochtend', 'Middag', 'Maakt niet uit'].map(x => `<button class="chip" data-dd="${x}" aria-pressed="${A.dagdeel === x}">${x}</button>`).join('')}</div></div>`}
     ${k && k.telefoon ? '' : `<div class="grid2"><div class="fld"><label for="av-naam">Je naam</label><input class="inp" id="av-naam" autocomplete="name" value="${esc(S.me.naam || (k && k.naam) || '')}"></div>
       <div class="fld"><label for="av-tel">Telefoon</label><input class="inp" id="av-tel" type="tel" autocomplete="tel" value="${esc(S.me.telefoon || '')}"></div></div>`}
     <div class="fld"><label for="av-opm">Nog iets wat Kim moet weten?</label><textarea class="inp" id="av-opm" placeholder="bv liever niet op woensdag, vacht is erg verklit">${esc(A.opm)}</textarea></div>
@@ -598,27 +679,49 @@ function viewAfspraak(el){
   </div>`;
   const lees = () => { const o = $('#av-opm'); if (o) A.opm = o.value; const h = $('#av-hond'); if (h) A.hondTxt = h.value; const n = $('#av-naam'), t = $('#av-tel'); if (n) S.me.naam = n.value; if (t) S.me.telefoon = t.value; };
   const tik = (sel, f) => $$(sel, el).forEach(b => b.onclick = () => { lees(); f(b); viewAfspraak(el); });
-  tik('[data-hd]', b => { const i = A.hond.indexOf(b.dataset.hd); if (i >= 0) A.hond.splice(i, 1); else A.hond.push(b.dataset.hd); });
-  tik('[data-bh]', b => { A.behandeling = A.behandeling === b.dataset.bh ? '' : b.dataset.bh; });
+  tik('[data-hd]', b => { const i = A.hond.indexOf(b.dataset.hd); if (i >= 0) A.hond.splice(i, 1); else A.hond.push(b.dataset.hd); A.slots = []; A.week = null; });
+  tik('[data-bh]', b => { A.behandeling = A.behandeling === b.dataset.bh ? '' : b.dataset.bh; A.slots = []; A.week = null; });
   tik('[data-wn]', b => { A.wanneer = b.dataset.wn; });
   tik('[data-dd]', b => { A.dagdeel = b.dataset.dd; });
+  tik('[data-slot]', b => { const t = +b.dataset.slot; const i = A.slots.indexOf(t); if (i >= 0) A.slots.splice(i, 1); else if (A.slots.length < 3) A.slots.push(t); else toast('Kies maximaal 3 momenten'); A.slots.sort((x,y) => x-y); });
+  tik('[data-pw]', b => { A.week = Math.max(0, (A.week || 0) + (+b.dataset.pw)); });
+  tik('[data-sx]', b => { A.slots = A.slots.filter(x => x !== +b.dataset.sx); });
   $('#av-go').onclick = async () => {
     lees();
     const hond = honden.length ? A.hond.join(' en ') : A.hondTxt.trim();
     if (!hond) return toast('Voor welke hond is de afspraak?');
-    if (!A.wanneer) return toast('Kies ongeveer wanneer');
+    if (plek){ if (!A.slots.length) return toast('Kies 1 tot 3 momenten die jou passen'); }
+    else if (!A.wanneer) return toast('Kies ongeveer wanneer');
     const naam = $('#av-naam') ? $('#av-naam').value.trim() : k.naam, tel = $('#av-tel') ? $('#av-tel').value.trim() : k.telefoon;
     if (!naam) return toast('Vul je naam in');
     if (telNorm(tel).length < 9) return toast('Vul je telefoonnummer in');
     S.me = {naam, telefoon: tel}; store.set('tk_me', S.me);
     const btn = $('#av-go'); btn.disabled = true; btn.textContent = 'Versturen…';
     try {
-      await rpc('aanvraag', {hond, behandeling: A.behandeling, voorkeur: [A.wanneer, A.dagdeel].filter(Boolean).join(', '), opmerking: A.opm, naam, telefoon: tel, website: $('#av-hp').value});
+      const voorkeur = plek ? A.slots.map(t => cap(new Date(t).toLocaleDateString('nl-NL', {weekday:'short', day:'numeric', month:'short'})) + ' ' + tijdTxt(new Date(t))).join(' · ') : [A.wanneer, A.dagdeel].filter(Boolean).join(', ');
+      await rpc('aanvraag', {hond, behandeling: A.behandeling, voorkeur, slots: plek ? A.slots.map(t => new Date(t).toISOString()) : [], duur, opmerking: A.opm, naam, telefoon: tel, website: $('#av-hp').value});
       S._av = null;
-      el.innerHTML = `<div class="card pad"><div class="done"><img src="${DOG}" alt=""><h3>Aanvraag verstuurd!</h3><p style="margin:0">Kim appt je zo snel mogelijk met een voorstel voor ${esc(hond)}.</p><button class="btn btn-s" id="av-home">Terug naar home</button></div></div>`;
+      el.innerHTML = `<div class="card pad"><div class="done"><img src="${DOG}" alt=""><h3>Aanvraag verstuurd!</h3><p style="margin:0">${plek ? 'Kim bevestigt je afspraak zo snel mogelijk via WhatsApp.' : 'Kim appt je zo snel mogelijk met een voorstel voor ' + esc(hond) + '.'}</p><button class="btn btn-s" id="av-home">Terug naar home</button></div></div>`;
       $('#av-home').onclick = () => go('home');
     } catch(e){ btn.disabled = false; btn.textContent = 'Aanvraag versturen'; toast(e.message); }
   };
+}
+
+function plekkenHtml(dagen, A, duur){
+  const vrij = dagen.filter(x => x.tijden.length);
+  const eerst = vrij[0];
+  const ws = 5; // werkdagen per pagina
+  if (A.week == null){ const i = dagen.findIndex(x => x.tijden.length); A.week = i > 0 ? Math.floor(i / ws) : 0; }
+  const pagina = dagen.slice(A.week * ws, A.week * ws + ws);
+  const dagLbl = d => cap(d.toLocaleDateString('nl-NL', {weekday:'long', day:'numeric', month:'long'}));
+  const uur = duur >= 60 ? (duur / 60).toString().replace('.', ',') + ' uur' : duur + ' minuten';
+  return `<div class="fld"><span class="lbl">Wanneer kan het?</span>
+    <div class="card pad" style="display:flex;gap:12px;align-items:center;border-color:var(--olive);background:var(--olive-soft)"><span style="font-size:24px">📅</span><span style="flex:1"><b style="display:block;font-size:18px">${eerst ? 'Eerst vrij: ' + esc(dagLbl(eerst.d)) : 'Helaas, de komende weken zit Kim vol'}</b><span class="hint" style="margin:0;color:var(--olive-ink)">${eerst ? 'Voor een beurt van ongeveer ' + uur : 'App Kim, dan kijkt ze wat er mogelijk is.'}</span></span></div>
+    ${A.slots.length ? `<div class="chips">${A.slots.map(t => `<button class="chip" data-sx="${t}" aria-pressed="true"><span>✓ ${esc(cap(new Date(t).toLocaleDateString('nl-NL', {weekday:'short', day:'numeric', month:'short'})))} ${tijdTxt(new Date(t))}</span><small>tik om weg te halen</small></button>`).join('')}</div>` : ''}
+    <div class="card">${pagina.map(x => `<div class="slotdag ${x.tijden.length ? '' : 'vol'}"><div class="sd-h"><b>${esc(cap(x.d.toLocaleDateString('nl-NL', {weekday:'short', day:'numeric', month:'short'})))}</b><span>${x.tijden.length ? (x.tijden.length > 1 ? x.tijden.length + ' plekken' : '1 plek') : 'vol'}</span></div>
+      ${x.tijden.length ? `<div class="sd-t">${x.tijden.map(t => `<button class="slot" data-slot="${t.getTime()}" aria-pressed="${A.slots.includes(t.getTime())}">${tijdTxt(t)}</button>`).join('')}</div>` : ''}</div>`).join('')}</div>
+    <div class="btnrow" style="justify-content:space-between"><button class="btn btn-s btn-sm" data-pw="-1" ${A.week ? '' : 'disabled'}>‹ Eerder</button><span class="hint" style="align-self:center;margin:0">${A.slots.length}/3 gekozen</span><button class="btn btn-s btn-sm" data-pw="1" ${(A.week + 1) * ws < dagen.length ? '' : 'disabled'}>Later ›</button></div>
+    <p class="hint" style="margin:0">Je ziet alleen momenten waarop Kim echt tijd heeft. Past niets? Schrijf het hieronder of app Kim.</p></div>`;
 }
 
 /* ---- INFO ---- */
