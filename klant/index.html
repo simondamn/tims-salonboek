@@ -8,6 +8,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Tims">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://drive.google.com https://*.googleusercontent.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="../icons/favicon.png">
 <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
@@ -319,6 +321,7 @@ a.btn{text-decoration:none}
 .pill{display:inline-block;font-size:14px;font-weight:800;border-radius:999px;padding:2px 10px;background:var(--olive-soft);color:var(--olive-ink)}
 </style>
 <style>.top{top:0;padding-top:env(safe-area-inset-top,0px)}html,body{overscroll-behavior-y:none}</style>
+<script>window.TIMS_EXEC = "AKfycbxqW4htFU3oTYmWf0roPZ4Yg3U-rIBUR8z5ssZCDeXqD7DNCXofPhmrgckl7Okx0R0CVQ";</script>
 </head>
 <body>
 
@@ -366,10 +369,14 @@ const DOG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAFdCAMAAACO3aAjA
 const P = new URLSearchParams(location.search);
 const DEMO = !!window.TIMS_KLANT_DEMO;
 const BRON = (P.get('s') || store.get('tk_s', '') || '').trim();
-const CODE = (P.get('c') || store.get('tk_c', '') || '').trim().toLowerCase();
-if (P.get('s')) store.set('tk_s', P.get('s').trim());
-if (P.get('c')) store.set('tk_c', P.get('c').trim().toLowerCase());
-const EXEC = /^https?:/.test(BRON) ? BRON : (BRON ? `https://script.google.com/macros/s/${BRON}/exec` : '');
+const CODE = ((P.get('c') || store.get('tk_c', '') || '').trim().toLowerCase().match(/^[a-z0-9]{12,40}$/) || [''])[0];
+if (P.get('s') && /^[A-Za-z0-9_-]{20,120}$/.test(P.get('s').trim())) store.set('tk_s', P.get('s').trim());
+if (P.get('c') && /^[a-z0-9]{12,40}$/i.test(P.get('c').trim())) store.set('tk_c', P.get('c').trim().toLowerCase());
+// Beveiliging: alleen het eigen Google-adres van Tims (vast ingebouwd); een ander adres in een link wordt genegeerd
+const EXEC = (() => { const TEST = location.hostname === 'localhost';
+  if (TEST && /^http:\/\/localhost[:\/]/.test(BRON)) return BRON;
+  const id = window.TIMS_EXEC || BRON; return /^[A-Za-z0-9_-]{20,120}$/.test(id) ? `https://script.google.com/macros/s/${id}/exec` : ''; })();
+const veiligUrl = u => /^https:\/\/[^\s"'<>]+$/i.test(String(u || '')) ? String(u) : '';
 const KEY_CACHE = 'tk_cache';
 
 async function rpc(a, d){
@@ -400,7 +407,7 @@ function demoRpc(a, d){
 
 /* ---- staat ---- */
 const S = { data: store.get(KEY_CACHE + CODE, null), view: 'home', cart: store.get('tk_cart', {}), cat: '', me: store.get('tk_me', {naam:'', telefoon:''}) };
-const salon = () => (S.data && S.data.salon) || {};
+const salon = () => { const s0 = (S.data && S.data.salon) || {}, s = Object.assign({}, s0); ['reviewLink','instagram','facebook','website'].forEach(k => s[k] = veiligUrl(s0[k])); return s; };
 const klant = () => S.data && S.data.klant;
 const prodById = id => (S.data.producten || []).find(p => p.id === id);
 const voornaam = () => { const k = klant(); return k && k.naam ? k.naam.split(/[\s\/,&]/)[0] : (S.me.naam || '').split(' ')[0]; };
@@ -466,8 +473,8 @@ function viewHome(el){
       : `<div class="card pad stack" style="gap:10px"><b style="font-size:19px">Nog geen afspraak gepland</b>${honden.map(h => volgende(h)).filter(Boolean).join('')}<button class="btn btn-o" id="h-aanvraag">Afspraak aanvragen</button></div>`}
       ${nu.length ? `<button class="btn btn-s btn-sm" id="h-feed" style="align-self:flex-start">Alle afspraken automatisch in je agenda</button>` : ''}
       ${herinnerKaart(k)}
-      ${bst.length ? `<div class="sec-h"><h2>Je bestelling${bst.length > 1 ? 'en' : ''}</h2></div>${bst.map(b => `<div class="card pad stack" style="gap:6px"><div style="display:flex;justify-content:space-between;gap:8px"><b>${b.items.map(x => `${x.aantal}× ${esc(x.naam)}`).join(', ')}</b><span class="badge ${b.status === 'klaargelegd' ? 'b-done' : 'b-letop'}">${b.status === 'klaargelegd' ? 'ligt klaar' : 'gereserveerd'}</span></div><span class="hint" style="margin:0">${eur(b.totaal)} · ophalen: ${esc(b.ophalen || '')}</span></div>`).join('')}` : ''}
-      ${honden.length ? `<div class="sec-h"><h2>${honden.length > 1 ? 'Jullie honden' : 'Jouw hond'}</h2></div><div class="card list">${honden.map(h => `<div class="row" style="cursor:default"><span class="av">${esc((h.naam || '?')[0].toUpperCase())}</span><span class="main"><span class="t1">${esc(h.naam)}</span><span class="t2">${esc([h.ras, h.laatst ? 'laatst ' + nl(h.laatst, {day:'numeric', month:'short'}) : ''].filter(Boolean).join(' · '))}</span></span>${h.bezoeken ? `<span class="pill">${h.bezoeken}× bij Tims</span>` : ''}</div>`).join('')}</div>` : ''}`
+      ${bst.length ? `<div class="sec-h"><h2>Je bestelling${bst.length > 1 ? 'en' : ''}</h2></div>${bst.map(b => `<div class="card pad stack" style="gap:6px"><div style="display:flex;justify-content:space-between;gap:8px"><b>${b.items.map(x => `${+x.aantal || 0}× ${esc(x.naam)}`).join(', ')}</b><span class="badge ${b.status === 'klaargelegd' ? 'b-done' : 'b-letop'}">${b.status === 'klaargelegd' ? 'ligt klaar' : 'gereserveerd'}</span></div><span class="hint" style="margin:0">${eur(b.totaal)} · ophalen: ${esc(b.ophalen || '')}</span></div>`).join('')}` : ''}
+      ${honden.length ? `<div class="sec-h"><h2>${honden.length > 1 ? 'Jullie honden' : 'Jouw hond'}</h2></div><div class="card list">${honden.map(h => `<div class="row" style="cursor:default"><span class="av">${esc((h.naam || '?')[0].toUpperCase())}</span><span class="main"><span class="t1">${esc(h.naam)}</span><span class="t2">${esc([h.ras, h.laatst ? 'laatst ' + nl(h.laatst, {day:'numeric', month:'short'}) : ''].filter(Boolean).join(' · '))}</span></span>${h.bezoeken ? `<span class="pill">${+h.bezoeken || 0}× bij Tims</span>` : ''}</div>`).join('')}</div>` : ''}`
     : `<div class="grid"><button class="card pad stack" id="h-w" style="gap:6px;text-align:left"><span style="font-size:28px">🛍️</span><b style="font-size:19px">Producten</b><span class="hint" style="margin:0">Reserveer en haal op in de salon</span></button>
        <button class="card pad stack" id="h-a" style="gap:6px;text-align:left"><span style="font-size:28px">📅</span><b style="font-size:19px">Afspraak</b><span class="hint" style="margin:0">Vraag een trimbeurt aan</span></button></div>
        <p class="hint" style="margin:0">Klant bij Tims? Vraag Kim om je persoonlijke link, dan zie je hier ook je afspraken.</p>`}
@@ -543,14 +550,14 @@ function bindInstall(el){
 function prodKaart(p){
   const n = S.cart[p.id] || 0, op = p.voorraad === 0, weinig = p.voorraad != null && p.voorraad > 0 && p.voorraad <= 3;
   return `<div class="prod"><button class="ph" data-pd="${esc(p.id)}" style="border:0;padding:0" aria-label="Meer over ${esc(p.naam)}">${p.foto ? `<img src="${esc(p.foto)}" alt="" loading="lazy">` : `<img class="ill" src="${DOG}" alt="">`}
-      ${op ? '<span class="tag op">Uitverkocht</span>' : weinig ? `<span class="tag weinig">Nog ${p.voorraad}</span>` : p.populair ? '<span class="tag">Populair</span>' : ''}</button>
+      ${op ? '<span class="tag op">Uitverkocht</span>' : weinig ? `<span class="tag weinig">Nog ${+p.voorraad}</span>` : p.populair ? '<span class="tag">Populair</span>' : ''}</button>
     <div class="in"><span class="n">${esc(p.naam)}</span><span class="pr num">${eur(p.prijs)}</span>
       <div class="act">${n ? `<span class="qty"><button data-q="${esc(p.id)}" data-d="-1" aria-label="Eén minder">−</button><span class="num">${n}</span><button data-q="${esc(p.id)}" data-d="1" aria-label="Eén meer" ${p.voorraad != null && n >= p.voorraad ? 'disabled' : ''}>+</button></span>`
         : `<button class="add" data-add="${esc(p.id)}" ${op ? 'disabled' : ''}>${op ? 'Op' : 'In mandje'}</button>`}</div></div></div>`;
 }
 function bindProd(el){
-  $$('[data-add]', el).forEach(b => b.onclick = () => { S.cart[b.dataset.add] = 1; saveCart(); rerender(); toast('In je mandje ✓'); });
-  $$('[data-q]', el).forEach(b => b.onclick = () => { const p = prodById(b.dataset.q); let n = (S.cart[p.id] || 0) + (+b.dataset.d); if (p.voorraad != null) n = Math.min(n, p.voorraad); S.cart[p.id] = Math.max(0, n); saveCart(); rerender(); });
+  $$('[data-add]', el).forEach(b => b.onclick = () => { if (!klant() && cartItems().length >= 5) return toast('Maximaal 5 verschillende producten per bestelling'); S.cart[b.dataset.add] = 1; saveCart(); rerender(); toast('In je mandje ✓'); });
+  $$('[data-q]', el).forEach(b => b.onclick = () => { const p = prodById(b.dataset.q); let n = (S.cart[p.id] || 0) + (+b.dataset.d); if (p.voorraad != null) n = Math.min(n, p.voorraad); const max = klant() ? 10 : 3; if (n > max){ n = max; toast('Maximaal ' + max + ' per product. Meer nodig? App Kim even.'); } S.cart[p.id] = Math.max(0, n); saveCart(); rerender(); });
   $$('[data-pd]', el).forEach(b => b.onclick = () => prodVel(b.dataset.pd));
 }
 function rerender(){ if ($('#sw') && $('#pd-box')) prodVel($('#pd-box').dataset.id); else if ($('#sw') && $('#cartform')) cartVel(); else render(); }
@@ -573,7 +580,7 @@ function prodVel(id){
   sheet(p.naam, `<div id="pd-box" data-id="${esc(p.id)}" class="stack" style="gap:14px">
     <div class="prod" style="border-radius:20px"><div class="ph">${p.foto ? `<img src="${esc(p.foto.replace(/sz=w\d+/, 'sz=w1000'))}" alt="">` : `<img class="ill" src="${DOG}" alt="">`}</div></div>
     <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><span class="pr num" style="font-family:var(--f-display);font-weight:800;font-size:30px;color:var(--wine)">${eur(p.prijs)}</span>
-      <span class="hint" style="margin:0">${op ? '<b style="color:var(--bad)">Uitverkocht</b>' : p.voorraad != null ? (p.voorraad <= 3 ? `<b style="color:var(--warn)">Nog ${p.voorraad} op voorraad</b>` : 'Op voorraad') : ''}</span></div>
+      <span class="hint" style="margin:0">${op ? '<b style="color:var(--bad)">Uitverkocht</b>' : p.voorraad != null ? (p.voorraad <= 3 ? `<b style="color:var(--warn)">Nog ${+p.voorraad} op voorraad</b>` : 'Op voorraad') : ''}</span></div>
     ${p.omschrijving ? `<p style="margin:0;white-space:pre-line">${esc(p.omschrijving)}</p>` : ''}
     <p class="hint" style="margin:0">Ophalen in de salon, betalen bij het ophalen.</p></div>`,
     n ? `<span class="qty"><button data-q="${esc(p.id)}" data-d="-1" aria-label="Eén minder">−</button><span class="num">${n}</span><button data-q="${esc(p.id)}" data-d="1" aria-label="Eén meer" ${p.voorraad != null && n >= p.voorraad ? 'disabled' : ''}>+</button></span><button class="btn btn-p" id="pd-cart" style="flex:1">Naar mandje</button>`
