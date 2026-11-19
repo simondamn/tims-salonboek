@@ -251,6 +251,50 @@ a.btn{text-decoration:none}
 .toast .undo{margin-left:12px;border:0;border-radius:10px;background:#FFF8F0;color:var(--wine);font-weight:800;padding:6px 10px;font-size:15px}
 .toast{display:flex;align-items:center;gap:4px;position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:80;background:var(--wine);color:#FFF8F0;padding:12px 18px;border-radius:14px;font-weight:800;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
 .loading{display:grid;place-items:center;min-height:50vh;color:var(--muted);font-weight:700}
+.time2{display:grid;justify-items:center;min-width:64px;background:var(--rose-soft);color:var(--rose-ink);border-radius:10px;padding:5px 6px;line-height:1.05;flex:none}
+.time2 b{font-family:var(--f-display);font-size:20px;font-weight:800}.time2 small{font-size:12px;font-weight:800;opacity:.85;white-space:nowrap}
+.vrij{display:flex;align-items:center;gap:8px;padding:3px 14px;font-size:13px;font-weight:800;color:var(--olive-ink)}
+.vrij::before,.vrij::after{content:"";flex:1;border-top:1.5px dashed var(--olive)}
+.vrij span{background:var(--olive-soft);border-radius:999px;padding:1px 9px;white-space:nowrap}
+.vrij.end{color:var(--wine)}.vrij.end::before,.vrij.end::after{border-color:var(--wine-soft)}.vrij.end span{background:var(--wine-soft)}
+.vrij.bots{color:var(--bad)}.vrij.bots::before,.vrij.bots::after{border-color:var(--bad-soft)}.vrij.bots span{background:var(--bad-soft)}
+.daystat{display:flex;justify-content:space-between;gap:10px;font-size:15px;color:var(--muted);margin:-8px 2px 0}.daystat b{color:var(--ink)}
+.tl-off{position:absolute;left:44px;right:0;background:repeating-linear-gradient(135deg,var(--surface-2) 0 6px,transparent 6px 12px);pointer-events:none}
+.tl-dl{position:absolute;left:44px;right:0;border-top:2px solid var(--olive);z-index:1;pointer-events:none}
+.tl-dl span{position:absolute;right:2px;top:-10px;background:var(--olive);color:#2E2A06;font-size:11px;font-weight:800;border-radius:999px;padding:1px 7px;white-space:nowrap}
+.tl-dl.end{border-color:var(--wine)}.tl-dl.end span{background:var(--wine);color:var(--cream)}
+.tl-dl.late{border-top:1.5px dashed var(--wine);opacity:.65}.tl-dl.late span{background:var(--wine-soft);color:var(--wine)}
+.b-ziek{background:var(--warn-soft);color:var(--warn)}.b-weg{background:var(--surface-2);color:var(--muted)}
+.stopts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stopts button{border:1.5px solid var(--line);background:var(--surface);border-radius:14px;padding:9px 10px;text-align:left}
+.stopts b{display:block;font-size:16px}.stopts small{font-size:13px;color:var(--muted);font-weight:700}
+.stopts button[aria-pressed="true"]{border-color:var(--wine);box-shadow:0 0 0 1.5px var(--wine);background:var(--wine-soft)}
+.row.mem{background:#F3F1E6}.row.mem .t1{color:var(--muted)}
+.warnbox{display:flex;gap:12px;align-items:flex-start;background:var(--warn-soft);color:var(--warn);border-radius:14px;padding:14px}
+.warnbox .wi{width:32px;height:32px;flex:none;border-radius:50%;background:var(--warn);color:#fff;display:grid;place-items:center;font-weight:900;font-size:19px}
+.warnbox b{font-size:19px;color:var(--ink)}.warnbox p{margin:2px 0 0;font-weight:700}
+.tikbox{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:8px}
+.tk-amt{font-family:var(--f-display);font-weight:900;font-size:40px;line-height:1;color:var(--wine)}
+.goal{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:16px;display:grid;gap:8px}
+.g-amt{font-family:var(--f-display);font-weight:900;font-size:38px;line-height:1;color:var(--olive-ink);white-space:nowrap}
+.g-amt small{font-size:17px;color:var(--muted);font-weight:800}
+.g-line{position:relative;height:14px;border-radius:8px;background:var(--surface-2);margin:36px 12px 8px 6px}
+.g-fill{height:100%;max-width:100%;border-radius:8px;background:repeating-linear-gradient(90deg,var(--olive) 0 14px,#B9C15A 14px 18px)}
+.g-ms{position:absolute;top:-4px;transform:translateX(-50%);font-size:16px}
+.g-ms.uit{filter:grayscale(1);opacity:.4}
+.g-ms.end{left:auto;right:-14px;transform:none;top:-9px;font-size:22px}
+.g-dog{position:absolute;bottom:5px;width:40px;transform:translateX(-50%);transition:left .6s}
+.g-sub{display:flex;justify-content:space-between;font-size:15px;color:var(--muted)}.g-sub b{color:var(--ink)}
+.g-tip{background:var(--olive-soft);color:var(--olive-ink);border-radius:12px;padding:8px 11px;font-size:15px;line-height:1.3}
+.mrow{padding:10px 14px;border-top:1px solid var(--line)}.mrow:first-child{border-top:0}
+.mrow .mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}.mrow .mh b{font-family:var(--f-display);font-size:19px;color:var(--wine)}
+.mrow .ok{font-size:12px;font-weight:800;color:var(--ok);background:var(--ok-soft);border-radius:999px;padding:1px 8px}
+.mrow .nok{font-size:12px;font-weight:800;color:var(--muted);background:var(--surface-2);border-radius:999px;padding:1px 8px}
+.mg{display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-size:15px}.mg>span:nth-child(odd){color:var(--muted);font-weight:700}
+.ypath{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.ym{display:grid;justify-items:center;font-size:13px;font-weight:800;color:var(--muted);gap:2px}
+.ym i{width:30px;height:30px;border-radius:50%;background:var(--surface-2);border:1.5px solid var(--line);display:grid;place-items:center;font-style:normal;color:#fff;font-size:14px}
+.ym.ok i{background:var(--ok);border-color:var(--ok)}.ym.nu i{border:2.5px dashed var(--wine);background:var(--surface)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 <style>.top{top:0;padding-top:env(safe-area-inset-top,0px)}html,body{overscroll-behavior-y:none}</style>
@@ -324,7 +368,8 @@ function fail(e){ console.error(e); toast('Dat lukte niet: ' + (e && e.message ?
 const store = { get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } }, set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } } };
 
 /* ============ Staat ============ */
-const S = { data:null, view:'vandaag', idx:null, periode:{soort:'maand', ref:todayISO().slice(0,7)}, hondFilter:'alle', zoek:'', agenda:{} };
+const DOGIMG = (()=>{ try { return (viewVandaag.toString().match(/data:image\/png;base64,[A-Za-z0-9+\/=]+/) || [''])[0]; } catch(e){ return ''; } })();
+const S = { omzetTab: (()=>{ try { return JSON.parse(localStorage.getItem('tims_omzettab')) || 'omzet'; } catch(e){ return 'omzet'; } })(), data:null, view:'vandaag', idx:null, periode:{soort:'maand', ref:todayISO().slice(0,7)}, hondFilter:'alle', zoek:'', agenda:{} };
 
 function buildIndex(){
   const per = {};
@@ -343,7 +388,7 @@ const hondById = id => S.data.honden.find(h => h.id === id);
 const sortedRegs = () => S.data.registraties.slice().sort((a,b)=> (b.datum+b.id).localeCompare(a.datum+a.id));
 
 /* ============ Verbinding met de server ============ */
-const APP_VERSIE = '1.3.1';
+const APP_VERSIE = '1.4';
 const MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'gas' : (window.TIMS_PWA ? 'api' : 'demo');
 const IS_LIVE = MODE !== 'demo';
 const Conn = {
@@ -419,7 +464,7 @@ const Demo = {
   async handle(a, d){
     const st = this.load();
     switch (a){
-      case 'load': return JSON.parse(JSON.stringify({honden:st.honden, registraties:st.registraties, producten:st.producten, bestellingen:st.bestellingen||[], aanvragen:st.aanvragen||[], instellingen:st.instellingen}));
+      case 'load': return JSON.parse(JSON.stringify({honden:st.honden, registraties:st.registraties, producten:st.producten, bestellingen:st.bestellingen||[], aanvragen:st.aanvragen||[], geld:st.geld||[], instellingen:st.instellingen}));
       case 'fotoUpload': return {demo:true};
       case 'sync': d.ops.forEach(op => applyOp(st, op.a, op.d)); this.save(); return {done: d.ops.map(o => o.q), errors: []};
       case 'agenda': { const a1 = new Date(d.van).getTime(), b1 = new Date(d.tot).getTime(); return (st.agenda||[]).filter(e => { const t = new Date(e.start).getTime(); return t >= a1 && t < b1; }).sort((x,y)=>x.start.localeCompare(y.start)); }
@@ -438,7 +483,7 @@ const Demo = {
 const KEY_Q = 'tims_wachtrij_' + MODE, KEY_CACHE = 'tims_cache_' + MODE, KEY_REJ = 'tims_geweigerd_' + MODE;
 function applyOp(data, a, d){
   const up = (list, o) => { const i = list.findIndex(x => x.id === o.id); if (i >= 0) list[i] = o; else list.push(o); };
-  data.producten ||= []; data.bestellingen ||= []; data.aanvragen ||= [];
+  data.producten ||= []; data.bestellingen ||= []; data.aanvragen ||= []; data.geld ||= [];
   const voorraadDelta = (oud, nieuw) => { const t = {}; (oud||[]).forEach(p => t[p.naam] = (t[p.naam]||0) + (+p.aantal||1)); (nieuw||[]).forEach(p => t[p.naam] = (t[p.naam]||0) - (+p.aantal||1));
     Object.keys(t).forEach(n => { const p = data.producten.find(x => x.naam === n); if (p && p.voorraad != null && t[n]) p.voorraad = Math.max(0, +p.voorraad + t[n]); }); };
   if (a === 'saveReg'){ const oud = data.registraties.find(r => r.id === d.id); if (!d.bestellingId) voorraadDelta(oud ? oud.producten : [], d.producten); up(data.registraties, JSON.parse(JSON.stringify(d))); }
@@ -456,6 +501,8 @@ function applyOp(data, a, d){
   else if (a === 'deleteHond') data.honden = data.honden.filter(h => h.id !== d.id);
   else if (a === 'saveProducten'){ const oud = data.producten; data.producten = JSON.parse(JSON.stringify(d.list)).map(p => { const o = oud.find(x => x.id === p.id); return o ? {...p, voorraad:o.voorraad, foto:o.foto} : p; }); }
   else if (a === 'saveInstellingen') data.instellingen = JSON.parse(JSON.stringify(d.obj));
+  else if (a === 'saveGeld') up(data.geld, JSON.parse(JSON.stringify(d)));
+  else if (a === 'deleteGeld') data.geld = data.geld.filter(g => g.id !== d.id);
 }
 /* ---- Ongedaan maken: elke wijziging (of groep wijzigingen in één tik) kan met één tik terug ---- */
 const Undo = {
@@ -476,6 +523,7 @@ const Undo = {
     try {
       lijst('honden', 'saveHond', 'deleteHond');
       lijst('registraties', 'saveReg', 'deleteReg');
+      lijst('geld', 'saveGeld', 'deleteGeld');
       for (const b of (oud.bestellingen||[])){ const y = (S.data.bestellingen||[]).find(x => x.id === b.id); if (y && y.status !== b.status) push('bestellingStatus', {id:b.id, status:b.status}); }
       for (const a of (oud.aanvragen||[])){ const y = (S.data.aanvragen||[]).find(x => x.id === a.id); if (y && y.status !== a.status) push('aanvraagStatus', {id:a.id, status:a.status}); }
       const zonder = p => { const {voorraad, foto, fotoData, ...r} = p; return JSON.stringify(r); };
@@ -589,6 +637,47 @@ function verrijk(evs){
 function onthoudTitel(titel, hondId){ if (!titel || !hondId) return; const k = store.get('tims_evkaart', {}); k[norm(titel)] = hondId; store.set('tims_evkaart', k); }
 const evTijd = e => new Date(e.start).toLocaleTimeString('nl-NL', {hour:'2-digit', minute:'2-digit'});
 
+/* ---- 1.4: werkdag, dubbel, status, Tikkie ---- */
+const WERKDAG = () => Object.assign({van:'09:00', tot:'17:00', uiterlijk:'18:00'}, (S.data && S.data.instellingen.werkdag) || {});
+const hm2m = t => { const [a, b] = String(t || '0:0').split(':').map(Number); return a*60 + (b||0); };
+const duurTekst = m => { m = Math.max(0, Math.round(m)); const u = Math.floor(m/60), r = m % 60; return u ? (r ? `${u}u${pad(r)}` : `${u}u`) : `${r} min`; };
+const TIKKIE_VANAF = '2026-11-19';
+/** De registratie die bij een afspraak hoort: gekoppeld, of dezelfde hond op dezelfde dag zonder koppeling. */
+function regVoorEv(e){
+  const r = S.data.registraties.find(x => x.afspraakId === e.id); if (r) return r;
+  if (!e.hondId) return null;
+  const d = isoOf(new Date(e.start));
+  return S.data.registraties.find(x => x.type === 'trim' && x.hondId === e.hondId && x.datum === d && !x.afspraakId) || null;
+}
+function hondStatus(h){
+  if (!h) return '';
+  const s = h.status || (h.archief ? 'gestopt' : '');
+  if (s === 'ziek' && h.statusTot && h.statusTot < todayISO()) return 'ziekVoorbij';
+  return s;
+}
+const statusBadge = h => ({ziek:'<span class="badge b-ziek">🤒 ziek</span>', overleden:'<span class="badge b-weg">🕊 overleden</span>', gestopt:'<span class="badge b-weg">archief</span>'}[hondStatus(h)] || '');
+const ziekBlok = h => hondStatus(h) === 'ziek' ? `<div class="alert w">🤒 ${esc(h.naam)} is ziek of herstellend${h.statusTot ? ' (tot ' + esc(nlDag(h.statusTot,{day:'numeric',month:'short'})) + ')' : ''}</div>${h.statusNotitie ? `<p style="margin:0;padding:10px 14px 0;font-weight:700">${esc(h.statusNotitie)}</p>` : ''}` : '';
+const telKort = t => telNorm(t).slice(-9);
+/** Andere honden van dezelfde baas (zelfde klantlink of telefoonnummer). */
+function zelfdeBaas(h){
+  const t = h.telefoon ? telKort(h.telefoon) : '';
+  return S.data.honden.filter(x => x.id !== h.id && ((h.klantcode && x.klantcode === h.klantcode) || (t && x.telefoon && telKort(x.telefoon) === t)));
+}
+const openTikkies = () => S.data.registraties.filter(r => r.betaal === 'tikkie' && !r.tikkieBetaald && r.datum >= TIKKIE_VANAF && r.datum >= addDays(todayISO(), -60)).sort((a,b) => (b.datum+b.id).localeCompare(a.datum+a.id));
+function tikkieTekst(r){ const h = r.hondId ? hondById(r.hondId) : null; return `${r.type === 'trim' ? 'Trimbeurt ' + (h ? h.naam : r.hond || '') : 'Tims ' + ((r.producten||[]).map(p => p.naam).join(', ') || 'verkoop')} ${nlDag(r.datum,{day:'numeric',month:'short'})}`.replace(/\s+/g,' ').trim(); }
+async function kopieer(t, ok){ try { await navigator.clipboard.writeText(t); toast(ok || 'Gekopieerd ✓'); } catch(e){ prompt('Kopieer dit:', t); } }
+function tikkieBlok(r){
+  const bedrag = (+r.totaal).toFixed(2).replace('.', ',');
+  return `<div class="tikbox"><div class="eyebrow">Tikkie klaarzetten</div><div class="tk-amt num">${eur(r.totaal)}</div><div class="hint" style="margin:0">${esc(tikkieTekst(r))}</div>
+    <div class="btnrow"><button class="btn btn-o btn-sm" data-tkc="${bedrag}" style="flex:1">Kopieer bedrag</button><button class="btn btn-s btn-sm" data-tkt="${esc(tikkieTekst(r))}" style="flex:1">Kopieer omschrijving</button></div>
+    <a class="btn btn-s btn-sm" href="https://tikkie.me/" target="_blank" rel="noopener">Open Tikkie</a>
+    <p class="hint" style="margin:0">Maak de Tikkie in je Tikkie-app en plak het bedrag. Hij staat op Vandaag bij “Openstaande Tikkies” tot je hem afvinkt.</p></div>`;
+}
+function bindTikkie(root){
+  $$('[data-tkc]', root).forEach(b => b.onclick = () => kopieer(b.dataset.tkc, 'Bedrag gekopieerd ✓'));
+  $$('[data-tkt]', root).forEach(b => b.onclick = () => kopieer(b.dataset.tkt, 'Omschrijving gekopieerd ✓'));
+}
+
 /* ============ Contact ============ */
 const telNorm = t => { let d = String(t || '').replace(/[^\d+]/g, ''); if (d.startsWith('+')) d = d.slice(1); else if (d.startsWith('00')) d = d.slice(2); else if (d.startsWith('0')) d = '31' + d.slice(1); return d; };
 const waLink = (tel, msg) => `https://wa.me/${telNorm(tel)}${msg ? '?text=' + encodeURIComponent(msg) : ''}`;
@@ -618,7 +707,9 @@ async function viewVandaag(el){
       </div>
     </section>
     <div class="sec-h"><h2>Gepland vandaag</h2><span class="meta" id="plan-meta"></span></div>
+    <div class="daystat" id="plan-stat"></div>
     <div class="card list" id="plan-list"><div class="empty">Agenda laden…</div></div>
+    <div id="tikkie-box">${tikkieLijst()}</div>
     <div id="herinner-box"></div>
     <div class="sec-h"><h2>Geregistreerd</h2><span class="meta">${regs.length} ${regs.length===1?'regel':'regels'}</span></div>
     <div class="card list">${regs.length ? regs.slice().reverse().map(regRow).join('') : `<div class="empty"><img src="data:image/png;base64,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" alt=""><b>Nog niks geregistreerd</b>Tik op de groene + als een hond klaar is.</div>`}</div>
@@ -627,6 +718,7 @@ async function viewVandaag(el){
     <p class="hint">Berekend uit hoe vaak deze honden normaal komen. Tik op een hond om te bellen, te appen of een afspraak te plannen.</p>` : ''}
   </div>`;
   bindRows(el);
+  bindTikkieLijst(el);
   const cv = $('#c-verder', el); if (cv) cv.onclick = () => openReg({concept:true});
   const kbo = $('#kb-open', el); if (kbo) kbo.onclick = openKlantenapp;
   const cw = $('#c-weg', el); if (cw) cw.onclick = () => { wisConcept(); render(); };
@@ -635,7 +727,8 @@ async function viewVandaag(el){
     const evs = verrijk(await api.agenda(parseISO(d).toISOString(), parseISO(addDays(d,1)).toISOString()));
     S.evsToday = evs; const list = $('#plan-list'); if (!list || S.view !== 'vandaag') return;
     $('#plan-meta').textContent = evs.length ? `${evs.length} afspra${evs.length===1?'ak':'ken'}` : '';
-    list.innerHTML = evs.length ? evs.map(evRow).join('') : `<div class="empty"><b>Geen afspraken vandaag</b>Afspraken uit je agenda verschijnen hier vanzelf.</div>`;
+    const pl = planLijst(evs); $('#plan-stat').innerHTML = pl.stat;
+    list.innerHTML = evs.length ? pl.html : `<div class="empty"><b>Geen afspraken vandaag</b>Afspraken uit je agenda verschijnen hier vanzelf.</div>`;
     bindEv(list, evs);
     herinnerBlok();
   } catch(e){ const list = $('#plan-list'); if (list) list.innerHTML = `<div class="empty">${e.net ? 'Geen internet: agenda niet bijgewerkt.' : 'Agenda kon niet laden: ' + esc(e.message)}</div>`; }
@@ -648,18 +741,55 @@ function regRow(r){
   const sub = r.type === 'trim' ? [r.ras, r.klant, durTxt(r.duur), ex, prod && '+ '+prod].filter(Boolean).join(' · ') : [r.klant, 'verkoop'].filter(Boolean).join(' · ');
   return `<button class="row" data-reg="${r.id}"><span class="av ${r.type==='product'?'p':''}">${r.type==='product'?'€':esc(ini(title))}</span><span class="main"><span class="t1">${esc(title)} ${badge(r.gedrag==='bijt'?'bijt':'')}</span><span class="t2">${esc(sub)}</span></span><span class="amt num">${eur(r.totaal)}<small>${payTxt(r.betaal)}</small></span></button>`;
 }
+
+/** Gepland vandaag: elke afspraak met begin en eind, en hoeveel tijd er tussen zit. */
+function planLijst(evs){
+  const W = WERKDAG(), wv = hm2m(W.van), wt = hm2m(W.tot);
+  const heel = evs.filter(e => new Date(e.end) - new Date(e.start) >= 20*36e5);
+  const L = evs.filter(e => !heel.includes(e)).slice().sort((a,b) => a.start.localeCompare(b.start));
+  const parts = heel.map(evRow); let eind = null; const blokken = [];
+  L.forEach(e => {
+    const a = minVan(new Date(e.start)), b = Math.max(a, isoOf(new Date(e.end)) === isoOf(new Date(e.start)) ? minVan(new Date(e.end)) : 24*60);
+    if (eind != null){ const gat = a - eind; if (gat >= 5) parts.push(`<div class="vrij"><span>${duurTekst(gat)} vrij</span></div>`); else if (gat < 0) parts.push(`<div class="vrij bots"><span>overlapt ${duurTekst(-gat)}</span></div>`); }
+    parts.push(evRow(e)); eind = eind == null ? b : Math.max(eind, b); blokken.push([a, b]);
+  });
+  if (L.length) parts.push(`<div class="vrij end"><span>Klaar om ${hhmm(eind)}${eind < wt ? ' · daarna vrij tot ' + W.tot : ''}</span></div>`);
+  // samengevoegde bezette tijd
+  blokken.sort((x,y) => x[0]-y[0]); const U = [];
+  blokken.forEach(([a,b]) => { const l = U[U.length-1]; if (l && a <= l[1]) l[1] = Math.max(l[1], b); else U.push([a,b]); });
+  const bezig = U.reduce((t,[a,b]) => t + (b-a), 0);
+  const inWerk = U.reduce((t,[a,b]) => t + Math.max(0, Math.min(b,wt) - Math.max(a,wv)), 0);
+  const vrij = Math.max(0, (wt - wv) - inWerk);
+  const stat = L.length ? `<span><b>${duurTekst(bezig)}</b> bezig</span><span><b>${duurTekst(vrij)}</b> vrij tussen ${W.van} en ${W.tot}</span>` : '';
+  return {html: parts.join(''), stat};
+}
+function tikkieLijst(){
+  const L = openTikkies(); if (!L.length) return '';
+  const som = r2(L.reduce((a,b) => a + (+b.totaal||0), 0));
+  return `<div class="sec-h"><h2>Openstaande Tikkies</h2><span class="meta num">${eur(som)} open</span></div>
+  <div class="card list">${L.map(r => { const h = r.hondId ? hondById(r.hondId) : null;
+    return `<div class="row" style="cursor:default"><span class="av">${esc(ini(h ? h.naam : r.hond || r.klant || '€'))}</span><span class="main"><span class="t1">${esc(h ? h.naam : r.hond || (r.producten||[]).map(p=>p.naam).join(', ') || 'Verkoop')}</span><span class="t2">${esc([r.klant, cap(nlDag(r.datum,{weekday:'short',day:'numeric',month:'short'}))].filter(Boolean).join(' · '))} · ${eur(r.totaal)}</span></span>
+      <span class="btnrow" style="flex-wrap:nowrap"><button class="btn btn-s btn-sm" data-tkopen="${r.id}" aria-label="Tikkie klaarzetten">€</button><button class="btn btn-o btn-sm" data-tkbet="${r.id}">✓ Betaald</button></span></div>`; }).join('')}</div>`;
+}
+function bindTikkieLijst(el){
+  $$('[data-tkbet]', el).forEach(b => b.onclick = () => { const r = S.data.registraties.find(x => x.id === b.dataset.tkbet); if (!r) return; Q.push('saveReg', {...r, tikkieBetaald: todayISO()}); toast('Tikkie afgevinkt ✓'); const box = $('#tikkie-box'); if (box){ box.innerHTML = tikkieLijst(); bindTikkieLijst(box); } });
+  $$('[data-tkopen]', el).forEach(b => b.onclick = () => { const r = S.data.registraties.find(x => x.id === b.dataset.tkopen); if (!r) return;
+    sheet('Tikkie', tikkieBlok(r), `<button class="btn btn-s" id="tk-klaar" style="flex:1">Sluiten</button>`); bindTikkie($('.sheet')); $('#tk-klaar').onclick = closeSheet; });
+}
 function evRow(e){
   const h = e.hondId ? hondById(e.hondId) : null;
-  const done = S.data.registraties.find(r => r.afspraakId === e.id);
-  return `<button class="row" data-ev="${esc(e.id)}"><span class="time num">${evTijd(e)}</span><span class="main"><span class="t1">${esc(h ? h.naam : e.titel)} ${h ? badge(h.gedrag) : ''}</span><span class="t2">${esc(h ? [h.ras, h.eigenaar].filter(Boolean).join(' · ') : 'nog niet gekoppeld aan een hond')}</span></span>${done ? `<span class="badge b-done">✓ ${eur(done.totaal)}</span>` : `<span class="btn btn-o btn-sm">Afrekenen</span>`}</button>`;
+  const done = regVoorEv(e);
+  const heel = new Date(e.end) - new Date(e.start) >= 20*36e5;
+  const eind = new Date(e.end).toLocaleTimeString('nl-NL', {hour:'2-digit', minute:'2-digit'});
+  return `<button class="row" data-ev="${esc(e.id)}"><span class="time2 num">${heel ? '<b style="font-size:15px">hele dag</b>' : `<b>${evTijd(e)}</b><small>tot ${eind}</small>`}</span><span class="main"><span class="t1">${esc(h ? h.naam : e.titel)} ${h ? badge(h.gedrag) + statusBadge(h) : ''}</span><span class="t2">${esc(h ? [h.ras, h.eigenaar].filter(Boolean).join(' · ') : 'nog niet gekoppeld aan een hond')}</span></span>${done ? `<span class="badge b-done">✓ ${eur(done.totaal)}</span>` : `<span class="btn btn-o btn-sm">Afrekenen</span>`}</button>`;
 }
 function bindRows(el){
   $$('[data-reg]', el).forEach(b => b.onclick = () => openReg({id:b.dataset.reg}));
   $$('[data-hond]', el).forEach(b => b.onclick = () => openHond(b.dataset.hond));
 }
 function afrekenen(e){
-  const done = S.data.registraties.find(r => r.afspraakId === e.id);
-  if (done) return openReg({id:done.id});
+  const done = regVoorEv(e);
+  if (done){ if (!done.afspraakId){ Undo.bezig = true; Q.push('saveReg', {...done, afspraakId:e.id}); Undo.bezig = false; } return openReg({id:done.id}); }
   const m = norm(e.titel).match(/\(([^)]+)\)/);
   openReg({hondId:e.hondId, afspraakId:e.id, afspraakTitel:e.titel, zoek:e.hondId ? '' : (m ? m[1] : e.titel), datum:isoOf(new Date(e.start)), afspraakTijd:evTijd(e)});
 }
@@ -719,6 +849,10 @@ function renderForm(){
   const ins = S.data.instellingen; const h = F.hondId ? hondById(F.hondId) : null; const i = h ? S.idx[h.id] : null;
   let html = '';
   if (!F._edit) html += `<div class="mode" role="group" aria-label="Soort"><button data-mode="trim" aria-pressed="${F.type==='trim'}">Trimbeurt</button><button data-mode="product" aria-pressed="${F.type==='product'}">Alleen verkoop</button></div>`;
+  if (F._dubbel){ const al = S.data.registraties.find(x => x.id === F._dubbel);
+    if (al) html += `<div class="warnbox"><div class="wi">!</div><div style="flex:1"><b>${esc(h ? h.naam : al.hond)} is ${F.datum === todayISO() ? 'vandaag' : 'op deze dag'} al afgerekend</b><p>${eur(al.totaal)} · ${esc(payTxt(al.betaal).toLowerCase())}</p>
+      <p style="color:var(--ink);font-weight:400;margin-top:8px">Weet je zeker dat je hem nog een keer wilt opslaan?</p>
+      <div class="stack" style="gap:8px;margin-top:10px"><button class="btn btn-p" id="f-dub-nee">Nee, dat was dubbel</button><button class="btn btn-s" id="f-dub-ja">Ja, hij was er twee keer</button></div></div></div>`; }
   if (F._titel) html += `<p class="hint" style="margin:0">Afspraak: <b>${esc(F._titel)}</b>${F._tijd ? ' om ' + esc(F._tijd) : ''}</p>`;
   if (F.type === 'trim'){
     if (!h && !F._nieuw){
@@ -763,16 +897,19 @@ function renderForm(){
   }
   html += `<div class="fld"><label for="f-datum">Datum</label><input class="inp" id="f-datum" type="date" value="${F.datum}"></div>`;
   if (F._edit) html += F._confirmDel ? `<div class="card pad stack"><b>Deze registratie verwijderen?</b><p class="hint" style="margin:0">Hij blijft bewaard in het logboek en de backups.</p><div class="btnrow"><button class="btn btn-d" id="f-del2">Ja, verwijderen</button><button class="btn btn-s" id="f-del0">Nee</button></div></div>` : `<button class="btn btn-s" id="f-del">Verwijderen</button>`;
+  if (h && hondStatus(h) === 'ziek') html = `<div class="card">${ziekBlok(h)}<div style="height:10px"></div></div>` + html;
   el.innerHTML = html;
   bindForm(el);
+  const dn = $('#f-dub-nee', el); if (dn) dn.onclick = () => { const al = S.data.registraties.find(x => x.id === F._dubbel); F._klaar = true; wisConcept(); closeSheet(); render(); toast(`Niet opgeslagen. ${al && al.hond ? al.hond : 'Hij'} staat er één keer in ✓`); };
+  const dj = $('#f-dub-ja', el); if (dj) dj.onclick = () => { F._dubbelOk = true; F._dubbel = null; saveReg(); };
   updTot();
   if (F.type==='trim' && !h && !F._nieuw){ renderZoek(); const z = $('#f-zoek'); if (z && !F._edit && !matchMedia('(pointer:coarse)').matches) setTimeout(()=>z.focus({preventScroll:true}), 60); }
 }
 function dogCard(h, i, inForm){
   const last = i && i.last;
   return `<div class="dogcard">
-    ${h.gedrag==='bijt' ? `<div class="alert">⚠︎ Let op: deze hond kan bijten</div>` : h.gedrag==='letop' ? `<div class="alert w">Let op bij deze hond</div>` : ''}
-    <div class="hd"><span class="av" style="width:52px;height:52px;font-size:24px">${esc(ini(h.naam))}</span><div style="flex:1;min-width:0"><div class="n">${esc(h.naam)}${h.archief ? ' <span class="badge b-pay">archief</span>' : ''}</div><div class="muted" style="font-weight:700">${esc([h.ras, h.eigenaar].filter(Boolean).join(' · '))}</div></div>${inForm && !F._edit ? `<button class="btn btn-s btn-sm" id="f-wissel">Andere</button>` : ''}</div>
+    ${h.gedrag==='bijt' ? `<div class="alert">⚠︎ Let op: deze hond kan bijten</div>` : h.gedrag==='letop' ? `<div class="alert w">Let op bij deze hond</div>` : ''}${inForm ? '' : ziekBlok(h)}
+    <div class="hd"><span class="av" style="width:52px;height:52px;font-size:24px">${esc(ini(h.naam))}</span><div style="flex:1;min-width:0"><div class="n">${esc(h.naam)} ${statusBadge(h)}</div><div class="muted" style="font-weight:700">${esc([h.ras, h.eigenaar].filter(Boolean).join(' · '))}</div></div>${inForm && !F._edit ? `<button class="btn btn-s btn-sm" id="f-wissel">Andere</button>` : ''}</div>
     ${last || h.notities ? `<dl class="info">${last ? `<dt>Vorige keer</dt><dd>${esc(nlDag(last.datum,{day:'numeric',month:'long',year: last.datum.slice(0,4) === todayISO().slice(0,4) ? undefined : 'numeric'}))} · ${eur(last.bedragTrim)} · ${durTxt(last.duur)||'–'}</dd>${last.opmerking ? `<dt>Snit</dt><dd>${esc(last.opmerking)}</dd>` : ''}` : ''}${h.notities ? `<dt>Notitie</dt><dd>${esc(h.notities)}</dd>` : ''}${last ? `<dt>Bezoeken</dt><dd class="num">${i.visits.length}${i.interval ? ` · elke ~${Math.round(i.interval/7)} weken` : ''}</dd>` : ''}</dl>` : ''}
     ${last && inForm && !F._edit ? `<div style="padding:0 14px 14px"><button class="btn btn-o btn-sm" id="f-zelfde">Zelfde als vorige keer</button></div>` : ''}
     ${!last ? `<p class="hint" style="padding:0 14px 14px;margin:0">Eerste bezoek.</p>` : ''}
@@ -845,6 +982,11 @@ function saveReg(){
   } else if (!F.producten.length) return toast('Kies wat er verkocht is');
   if (!F.betaal) return toast('Kies hoe er betaald is');
   if (!/^\d{4}-\d{2}-\d{2}$/.test(F.datum)) return toast('Kies een datum');
+  if (F._klaar) return;
+  if (!F._edit && F.type === 'trim' && F.hondId && !F._dubbelOk){
+    const al = S.data.registraties.find(x => x.id !== F.id && x.type === 'trim' && x.hondId === F.hondId && x.datum === F.datum);
+    if (al){ F._dubbel = al.id; renderForm(); const sb = $('.sheet-b'); if (sb) sb.scrollTop = 0; return; }
+  }
   if (F._nieuw) maakHond();
   const h = F.hondId ? hondById(F.hondId) : null;
   const trim = F.type === 'trim';
@@ -865,7 +1007,9 @@ function saveReg(){
   const nieuw = !F._edit;
   F._klaar = true; wisConcept();
   closeSheet(); render();
-  if (nieuw && trim && h) naOpslaan(r, h); else toast(`Opgeslagen ✓ ${r.hond || 'verkoop'} · ${eur(r.totaal)}`);
+  if (nieuw && trim && h) naOpslaan(r, h);
+  else if (nieuw && r.betaal === 'tikkie'){ sheet('Opgeslagen ✓', tikkieBlok(r), `<button class="btn btn-s" id="tk-klaar" style="flex:1">Klaar</button>`); bindTikkie($('.sheet')); $('#tk-klaar').onclick = closeSheet; }
+  else toast(`Opgeslagen ✓ ${r.hond || 'verkoop'} · ${eur(r.totaal)}`);
 }
 function naOpslaan(r, h){
   const ug = Undo.kandidaat();
@@ -875,6 +1019,7 @@ function naOpslaan(r, h){
     <div class="fld"><span class="lbl">Volgende afspraak inplannen?</span><div class="chips">${opties.map(w => `<button class="chip" data-nw="${w}"><span>Over ${w} weken${w===wk && i && i.interval ? ' ★' : ''}</span><small>${esc(nlDag(addDays(r.datum, w*7),{weekday:'short',day:'numeric',month:'short'}))}</small></button>`).join('')}</div>${i && i.interval ? `<p class="hint" style="margin:0">★ = hoe vaak ${esc(h.naam)} normaal komt.</p>` : ''}</div>`,
     `${salonInfo().reviewLink && h.telefoon ? `<button class="btn btn-s" id="na-review" style="flex:1">Vraag review</button>` : ''}<button class="btn btn-s" id="na-klaar" style="flex:1">Klaar</button>`);
   $('#na-klaar').onclick = closeSheet;
+  if (r.betaal === 'tikkie'){ const sb = $('.sheet-b'); const d = document.createElement('div'); d.innerHTML = tikkieBlok(r); sb.insertBefore(d.firstElementChild, sb.children[1] || null); bindTikkie(sb); }
   if (ug){ const box = document.createElement('button'); box.className = 'btn btn-s btn-sm'; box.style.alignSelf = 'flex-start'; box.textContent = 'Oeps, ongedaan maken'; box.onclick = () => Undo.doe(ug); $('.sheet-b').appendChild(box); }
   const nr = $('#na-review'); if (nr) nr.onclick = () => vraagReview(h);
   $$('[data-nw]').forEach(b => b.onclick = () => openPlan({hondId:h.id, datum:addDays(r.datum, (+b.dataset.nw)*7), tijd: F && F._tijd ? F._tijd : ''}));
@@ -896,8 +1041,8 @@ function viewHonden(el){
   el.innerHTML = `<div class="stack">
     <div class="sec-h"><h2>Honden</h2><span class="meta num">${actief.length} in je klantenbestand</span></div>
     <input class="inp" id="h-zoek" type="search" placeholder="Zoek op hond, eigenaar of ras" value="${esc(S.zoek)}" autocomplete="off" aria-label="Zoek hond">
-    <div class="filters" role="group" aria-label="Filter">${[['alle','Alle'],['vast','Vaste klanten'],['letop',`Let op (${cnt('letop')})`],['bijt',`Bijt (${cnt('bijt')})`]].concat(narch ? [['archief',`Archief (${narch})`]] : []).map(([k,l]) => `<button class="chip" data-f="${k}" aria-pressed="${f===k}">${l}</button>`).join('')}</div>
-    <div class="card list" id="h-list">${list.slice(0,200).map(({h,i}) => `<button class="row" data-hond="${h.id}"><span class="av">${esc(ini(h.naam))}</span><span class="main"><span class="t1">${esc(h.naam)} ${badge(h.gedrag)}</span><span class="t2">${esc([h.ras, h.eigenaar].filter(Boolean).join(' · '))}</span></span><span class="amt num" style="font-size:16px">${i.last ? esc(nlDag(i.last.datum,{day:'numeric',month:'short'})) : '–'}<small>${i.visits.length}× geweest</small></span></button>`).join('') || `<div class="empty"><b>Geen honden gevonden</b>Probeer een andere naam.</div>`}</div>
+    <div class="filters" role="group" aria-label="Filter">${[['alle','Alle'],['vast','Vaste klanten'],['letop',`Let op (${cnt('letop')})`],['bijt',`Bijt (${cnt('bijt')})`]].concat(narch ? [['archief',`Archief en 🕊 (${narch})`]] : []).map(([k,l]) => `<button class="chip" data-f="${k}" aria-pressed="${f===k}">${l}</button>`).join('')}</div>
+    <div class="card list" id="h-list">${list.slice(0,200).map(({h,i}) => `<button class="row" data-hond="${h.id}"><span class="av">${esc(ini(h.naam))}</span><span class="main"><span class="t1">${esc(h.naam)} ${badge(h.gedrag)}${statusBadge(h)}</span><span class="t2">${esc([h.ras, h.eigenaar].filter(Boolean).join(' · '))}</span></span><span class="amt num" style="font-size:16px">${i.last ? esc(nlDag(i.last.datum,{day:'numeric',month:'short'})) : '–'}<small>${i.visits.length}× geweest</small></span></button>`).join('') || `<div class="empty"><b>Geen honden gevonden</b>Probeer een andere naam.</div>`}</div>
     <button class="btn btn-s" id="h-nieuw">+ Nieuwe hond toevoegen</button>
   </div>`;
   const z = $('#h-zoek'); z.oninput = () => { S.zoek = z.value; const p = z.selectionStart; viewHonden(el); const z2 = $('#h-zoek'); z2.focus(); z2.setSelectionRange(p,p); };
@@ -909,8 +1054,12 @@ function openHond(id){
   const h = hondById(id); if (!h) return toast('Deze hond bestaat niet meer');
   const i = S.idx[id];
   const gem = i.visits.length ? r2(i.visits.reduce((a,b)=>a+(+b.bedragTrim||0),0)/i.visits.length) : 0;
-  sheet(h.naam, `${dogCard(h, i, false)}
+  const st = hondStatus(h), andere = zelfdeBaas(h);
+  sheet(h.naam, `${st === 'overleden' ? `<div class="card pad" style="background:#F3F1E6;text-align:center;font-weight:800;color:var(--muted)">🕊 In herinnering</div>` : ''}${dogCard(h, i, false)}
     ${contactKnoppen(h)}
+    ${andere.length || h.eigenaar ? `<div class="card pad stack" style="gap:8px"><span class="lbl">Honden van ${esc(h.eigenaar || 'deze baas')}</span>
+      ${andere.length ? `<div class="card list">${andere.map(x => `<button class="row ${hondStatus(x) === 'overleden' || hondStatus(x) === 'gestopt' ? 'mem' : ''}" data-hond="${x.id}"><span class="av">${hondStatus(x) === 'overleden' ? '🕊' : esc(ini(x.naam))}</span><span class="main"><span class="t1">${esc(x.naam)} ${statusBadge(x)}</span><span class="t2">${esc(x.ras || '')}</span></span></button>`).join('')}</div>` : ''}
+      <button class="btn btn-o btn-sm" id="d-nieuw">+ Nieuwe hond bij ${esc(h.eigenaar || 'deze baas')}</button></div>` : ''}
     <div class="statgrid">
       <div class="kpi"><div class="l">Bezoeken</div><div class="v num">${i.visits.length}</div></div>
       <div class="kpi"><div class="l">Komt elke</div><div class="v num">${i.interval ? '~'+Math.round(i.interval/7)+' wk' : '–'}</div></div>
@@ -927,33 +1076,43 @@ function openHond(id){
   $('#d-reg', b).onclick = () => openReg({hondId:id});
   $('#d-plan', b).onclick = () => openPlan({hondId:id});
   $('#d-edit', b).onclick = () => editHond(id);
+  const dn = $('#d-nieuw', b); if (dn) dn.onclick = () => editHond(null, h);
   $('#d-klant', b).onclick = () => deelPersoonlijk(hondById(id));
   const rv = $('#d-review', b); if (rv) rv.onclick = () => vraagReview(h);
   bindRows(b);
 }
-function editHond(id){
+function editHond(id, basis){
   const orig = id ? hondById(id) : null;
-  const h = orig ? {...orig} : {id:uid('h'), naam:'', ras:'', eigenaar:'', telefoon:'', gedrag:'', snit:'', prijs:null, duur:null, notities:'', archief:false};
+  const h = orig ? {...orig} : {id:uid('h'), naam:'', ras:'', eigenaar:'', telefoon:'', gedrag:'', snit:'', prijs:null, duur:null, notities:'', archief:false, status:''};
+  if (!orig && basis) Object.assign(h, {eigenaar:basis.eigenaar || '', telefoon:basis.telefoon || '', klantcode:basis.klantcode || undefined, herinnering:basis.herinnering || undefined});
   const visits = id ? S.idx[id].visits.length : 0;
-  sheet(id ? 'Hond bewerken' : 'Nieuwe hond', `
+  sheet(id ? 'Hond bewerken' : basis ? 'Nieuwe hond bij ' + (basis.eigenaar || 'deze baas') : 'Nieuwe hond', `
+    ${basis ? `<p class="hint" style="margin:0">Naam, telefoon en klantlink van ${esc(basis.eigenaar || 'de baas')} staan al ingevuld.</p>` : ''}
     <div class="fld"><label for="e-naam">Naam hond</label><input class="inp" id="e-naam" value="${esc(h.naam)}"></div>
     <div class="fld"><label for="e-ras">Ras</label><input class="inp" id="e-ras" list="rassen" value="${esc(h.ras)}">${rassenList()}</div>
     <div class="fld"><label for="e-eig">Eigenaar</label><input class="inp" id="e-eig" value="${esc(h.eigenaar)}"></div>
     <div class="fld"><label for="e-tel">Telefoon</label><input class="inp" id="e-tel" type="tel" placeholder="06 12345678" value="${esc(h.telefoon)}"></div>
     <div class="fld"><span class="lbl">Gedrag</span><div class="seg g" role="group">${['lief','letop','bijt'].map(g => `<button data-v="${g}" data-eg="${g}" aria-pressed="${h.gedrag===g}">${{lief:'😊 Lief',letop:'Let op',bijt:'⚠︎ Bijt'}[g]}</button>`).join('')}</div></div>
     <div class="fld"><label for="e-not">Vaste notitie</label><textarea class="inp" id="e-not" placeholder="bv huidprobleem, oud en doof, muilkorf bij nagels, allergie voor shampoo X">${esc(h.notities)}</textarea></div>
-    ${id ? `<div class="fld"><span class="lbl">Archief</span><button class="chip" id="e-arch" aria-pressed="${!!h.archief}" style="align-self:flex-start">${h.archief ? '✓ Gearchiveerd' : 'Archiveren (overleden of verhuisd)'}</button><p class="hint" style="margin:0">Een gearchiveerde hond verdwijnt uit de lijsten, maar zijn geschiedenis en omzet blijven bewaard.</p></div>
+    ${id ? `<div class="fld"><span class="lbl">Hoe gaat het met ${esc(h.naam)}?</span><div class="stopts" id="e-st">${[['','😊 Gezond','gewoon actief'],['ziek','🤒 Ziek / herstellend','tijdelijk'],['overleden','🕊 Overleden','in herinnering'],['gestopt','👋 Komt niet meer','verhuisd of gestopt']].map(([k,t,sub]) => `<button data-st="${k}" aria-pressed="${(h.status || (h.archief ? 'gestopt' : '')) === k}"><b>${t}</b><small>${sub}</small></button>`).join('')}</div>
+      <div id="e-ziek" class="stack" style="gap:8px"></div><p class="hint" style="margin:0">Overleden of gestopt: de hond verdwijnt uit de lijsten, de klantenapp en de herinneringen. Zijn geschiedenis en omzet blijven bewaard.</p></div>
       <div class="fld" id="e-merge-box"><span class="lbl">Dubbel in de lijst?</span><button class="btn btn-s btn-sm" id="e-merge" style="align-self:flex-start">Samenvoegen met een andere hond</button></div>` : ''}
     ${id && !visits ? `<button class="btn btn-d" id="e-del">Hond verwijderen</button>` : ''}`,
     `<button class="btn btn-p" id="e-save" style="flex:1">Opslaan</button>`);
   const b = $('.sheet');
   $$('[data-eg]', b).forEach(x => x.onclick = () => { h.gedrag = h.gedrag === x.dataset.eg ? '' : x.dataset.eg; $$('[data-eg]', b).forEach(y => y.setAttribute('aria-pressed', String(y.dataset.eg === h.gedrag))); });
-  const ar = $('#e-arch', b); if (ar) ar.onclick = () => { h.archief = !h.archief; ar.setAttribute('aria-pressed', String(h.archief)); ar.textContent = h.archief ? '✓ Gearchiveerd' : 'Archiveren (overleden of verhuisd)'; };
+  if (!h.status && h.archief) h.status = 'gestopt';
+  const ziekVeld = () => { const z = $('#e-ziek', b); if (!z) return; z.innerHTML = h.status === 'ziek' ? `<textarea class="inp" id="e-stn" style="min-height:64px" placeholder="Wat is er? bv geopereerd aan knie, rustig aan op de tafel">${esc(h.statusNotitie || '')}</textarea><div class="fld"><label for="e-stt">Tot wanneer? (mag leeg)</label><input class="inp" id="e-stt" type="date" value="${esc(h.statusTot || '')}"></div>` : ''; };
+  ziekVeld();
+  $$('[data-st]', b).forEach(x => x.onclick = () => { h.status = x.dataset.st; $$('[data-st]', b).forEach(y => y.setAttribute('aria-pressed', String(y.dataset.st === h.status))); ziekVeld(); });
   const del = $('#e-del', b); if (del) del.onclick = () => { Q.push('deleteHond', {id}); closeSheet(); toast('Verwijderd'); render(); };
   const mg = $('#e-merge', b); if (mg) mg.onclick = () => samenvoegen(orig);
   $('#e-save', b).onclick = () => {
     h.naam = cap($('#e-naam').value.trim()); h.ras = $('#e-ras').value.trim(); h.eigenaar = $('#e-eig').value.trim(); h.telefoon = $('#e-tel').value.trim(); h.notities = $('#e-not').value.trim();
     if (!h.naam) return toast('Vul een naam in');
+    if (id){ h.status = h.status || ''; h.archief = h.status === 'overleden' || h.status === 'gestopt';
+      if (h.status === 'ziek'){ h.statusNotitie = ($('#e-stn') ? $('#e-stn').value.trim() : h.statusNotitie || ''); h.statusTot = ($('#e-stt') ? $('#e-stt').value : h.statusTot || ''); }
+      else if (!h.status){ h.statusNotitie = ''; h.statusTot = ''; } }
     Q.push('saveHond', h);
     if (orig && (orig.naam !== h.naam || orig.ras !== h.ras || orig.eigenaar !== h.eigenaar))
       S.data.registraties.filter(r => r.hondId === h.id).forEach(r => Q.push('saveReg', {...r, hond:h.naam, ras:h.ras, klant:h.eigenaar}));
@@ -1009,10 +1168,14 @@ function tijdlijn(iso, evs, voorstel){
   const nu = new Date(); const nuMin = isoOf(nu) === iso ? minVan(nu) : null;
   const uren = []; for (let m = van; m <= tot; m += 60) uren.push(m);
   const botst = voorstel ? items.filter(x => x.a < voorstel.b && x.b > voorstel.a) : [];
+  const W = WERKDAG(), wv = hm2m(W.van), wt = hm2m(W.tot), wu = hm2m(W.uiterlijk);
+  const lijn = (m, cls, txt) => m > van && m < tot ? `<div class="tl-dl ${cls}" style="top:${(m-van)*PX}px"><span>${txt}</span></div>` : '';
   return `<div class="tl" data-tl="${iso}" data-van="${van}" style="height:${(tot-van)*PX}px">
+    ${wv > van ? `<div class="tl-off" style="top:0;height:${(Math.min(wv,tot)-van)*PX}px"></div>` : ''}${wt < tot ? `<div class="tl-off" style="top:${(Math.max(wt,van)-van)*PX}px;height:${(tot-Math.max(wt,van))*PX}px"></div>` : ''}
     ${uren.map(m => `<div class="tl-u" style="top:${(m-van)*PX}px"><span>${hhmm(m)}</span></div>`).join('')}
+    ${lijn(wv, '', 'Ochtendblok · ' + W.van)}${lijn(wt, 'end', 'Einde werkdag · ' + W.tot)}${wu > wt ? lijn(wu, 'late', 'uiterlijk ' + W.uiterlijk) : ''}
     ${nuMin != null && nuMin >= van && nuMin <= tot ? `<div class="tl-nu" style="top:${(nuMin-van)*PX}px"></div>` : ''}
-    ${items.map(x => { const h = x.e.hondId ? hondById(x.e.hondId) : null; const klaar = S.data.registraties.some(r => r.afspraakId === x.e.id);
+    ${items.map(x => { const h = x.e.hondId ? hondById(x.e.hondId) : null; const klaar = !!regVoorEv(x.e);
       return `<button class="tl-e ${x.e.bron === 'app' ? 'app' : ''} ${klaar ? 'klaar' : ''}" data-tle="${esc(x.e.id)}" style="top:${(x.a-van)*PX}px;height:${Math.max(22,(x.b-x.a)*PX-2)}px;left:calc(46px + (100% - 50px) * ${x.k}/${x.n});width:calc((100% - 50px) / ${x.n} - 3px)">
         <b>${esc(evNaam(x.e))}${h && h.gedrag === 'bijt' ? ' ⚠︎' : ''}</b><span>${hhmm(x.a)}–${hhmm(x.b)}${h && h.eigenaar ? ' · ' + esc(h.eigenaar) : ''}</span></button>`; }).join('')}
     ${voorstel ? `<div class="tl-v ${botst.length ? 'bots' : ''}" style="top:${(voorstel.a-van)*PX}px;height:${Math.max(22,(voorstel.b-voorstel.a)*PX-2)}px"><b>${esc(voorstel.naam || 'Nieuwe afspraak')}</b><span>${hhmm(voorstel.a)}–${hhmm(voorstel.b)}</span></div>` : ''}
@@ -1071,7 +1234,7 @@ async function viewAgenda(el){
 function evRowA(e){
   const h = e.hondId ? hondById(e.hondId) : null;
   const dur = Math.round((new Date(e.end) - new Date(e.start))/60000);
-  const done = S.data.registraties.find(r => r.afspraakId === e.id);
+  const done = regVoorEv(e);
   return `<button class="row" data-eva="${esc(e.id)}"><span class="time num">${evTijd(e)}</span><span class="main"><span class="t1">${esc(h ? h.naam : e.titel)} ${h ? badge(h.gedrag) : ''}</span><span class="t2">${esc(h ? [h.eigenaar, h.ras].filter(Boolean).join(' · ') : 'nog niet gekoppeld aan een hond')} · ${durTxt(dur)}</span></span>${done ? `<span class="badge b-done">✓</span>` : ''}</button>`;
 }
 function evOpties(e){
@@ -1102,6 +1265,7 @@ function openPlan(opts){
       <div class="grid2"><div class="fld"><label for="p-datum">Datum</label><input class="inp" id="p-datum" type="date" value="${P.datum}"></div><div class="fld"><label for="p-tijd">Tijd</label><input class="inp" id="p-tijd" type="time" step="900" value="${P.tijd}"></div></div>
       <div class="fld"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="lbl">Zo ziet die dag eruit</span><span class="btnrow"><button class="btn btn-s btn-sm" id="p-wv" aria-label="Week eerder">‹</button><button class="btn btn-s btn-sm" id="p-wn" aria-label="Week later">›</button></span></div><div id="p-week"></div><div id="p-bots"></div><div class="card pad" style="padding:10px 8px"><div id="p-dag"><div class="empty">Agenda laden…</div></div></div>
         <p class="hint" style="margin:0">Tik op een lege plek om die tijd te kiezen. Het gestippelde blok is de nieuwe afspraak.</p></div>
+      <div class="fld"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="lbl">Eerste vrije plek vanaf ${esc(nlDag(P.datum,{weekday:'short',day:'numeric',month:'short'}))}</span><button class="btn btn-s btn-sm" id="p-vrij">Zoek</button></div><div class="chips" id="p-vrijres"></div></div>
       <div class="fld"><span class="lbl">Duur</span><div class="chips">${[30,60,90,120,150,180,210].map(m => `<button class="chip" data-pd="${m}" aria-pressed="${P.duur===m}">${durTxt(m)}</button>`).join('')}</div></div>
       <div class="fld"><span class="lbl">Herhalen?</span><div class="chips">${[[0,'Eenmalig'],[4,'Elke 4 wk'],[6,'Elke 6 wk'],[8,'Elke 8 wk'],[12,'Elke 12 wk']].map(([w,l]) => `<button class="chip" data-ph="${w}" aria-pressed="${P.herhaal===w}">${l}</button>`).join('')}</div>
       ${P.herhaal ? `<div class="chips">${[2,3,4,6].map(n => `<button class="chip" data-pa="${n}" aria-pressed="${P.aantal===n}">${n}× vooruit</button>`).join('')}</div><p class="hint">Plant ${P.aantal} afspraken: ${Array.from({length:P.aantal},(_,k)=>nlDag(addDays(P.datum,k*7*P.herhaal),{day:'numeric',month:'short'})).join(', ')}.</p>` : ''}</div>
@@ -1118,12 +1282,32 @@ function openPlan(opts){
     $('#p-wv').onclick = () => { const d = addDays(P.datum, -7); P.datum = d < todayISO() ? todayISO() : d; draw(); };
     $('#p-wn').onclick = () => { P.datum = addDays(P.datum, 7); draw(); };
     toonDag();
+    $('#p-vrij').onclick = zoekVrij;
     $$('[data-pd]').forEach(b => b.onclick = () => { P.duur = +b.dataset.pd; draw(); });
     $$('[data-ph]').forEach(b => b.onclick = () => { P.herhaal = +b.dataset.ph; draw(); });
     $$('[data-pa]').forEach(b => b.onclick = () => { P.aantal = +b.dataset.pa; draw(); });
   };
   let botsingen = [], bevestigd = false, laden = null;
   function toonDag(){ laden = laadDag(); return laden; }
+  async function zoekVrij(){
+    const box = $('#p-vrijres'); if (!box) return; box.innerHTML = '<span class="hint">Zoeken…</span>';
+    const W = WERKDAG(), wv = hm2m(W.van), wt = hm2m(W.tot);
+    const dagen = (S.data.instellingen.boeken && S.data.instellingen.boeken.dagen) || [1,2,3,4,5];
+    const vond = []; let d = P.datum < todayISO() ? todayISO() : P.datum;
+    try {
+      for (let k = 0; k < 28 && vond.length < 3; k++, d = addDays(d, 1)){
+        if (!dagen.includes(parseISO(d).getDay())) continue;
+        const L = await AG.dag(d); const nuM = d === todayISO() ? minVan(new Date()) + 30 : 0;
+        const bez = L.map(e => [minVan(new Date(e.start)), isoOf(new Date(e.end)) === d ? minVan(new Date(e.end)) : 1440]);
+        for (let m = Math.max(wv, Math.ceil(nuM/15)*15); m + P.duur <= wt; m += 15){
+          if (!bez.some(([a,b]) => a < m + P.duur && b > m)){ vond.push({d, t:hhmm(m)}); break; }
+        }
+      }
+    } catch(e){ box.innerHTML = '<span class="hint">De agenda kan nu niet laden.</span>'; return; }
+    if (!$('#p-vrijres')) return;
+    $('#p-vrijres').innerHTML = vond.length ? vond.map(v => `<button class="chip" data-pv="${v.d}|${v.t}"><span>${esc(nlDag(v.d,{weekday:'short',day:'numeric',month:'short'}))}</span><small>${v.t}</small></button>`).join('') : `<span class="hint">Geen plek van ${durTxt(P.duur)} gevonden in 4 weken.</span>`;
+    $$('[data-pv]').forEach(b => b.onclick = () => { const [dd, tt] = b.dataset.pv.split('|'); P.datum = dd; P.tijd = tt; draw(); });
+  }
   async function laadDag(){
     const box = $('#p-dag'); if (!box) return;
     const h = P.hondId ? hondById(P.hondId) : null;
@@ -1189,6 +1373,7 @@ function totals(regs){
   for (const k in t) t[k] = r2(t[k]); return t;
 }
 function viewOverzicht(el){
+  if (S.omzetTab === 'geld') return viewGeld(el);
   const R = periodRange();
   const regs = S.data.registraties.filter(r => r.datum >= R.van && r.datum <= R.tot);
   const t = totals(regs);
@@ -1201,6 +1386,7 @@ function viewOverzicht(el){
   const shown = regs.filter(r => !q || [r.hond, r.klant, r.ras, r.opmerking, ...(r.producten||[]).map(p=>p.naam)].join(' ').toLowerCase().includes(q)).sort((a,b)=>(b.datum+b.id).localeCompare(a.datum+a.id));
   const byDay = {}; shown.forEach(r => (byDay[r.datum] ||= []).push(r));
   el.innerHTML = `<div class="stack">
+    ${omzetTabs()}
     <div class="mode" role="group" aria-label="Periode">${['maand','kwartaal','jaar'].map(s => `<button data-ps="${s}" aria-pressed="${S.periode.soort===s}" style="text-transform:capitalize">${s}</button>`).join('')}</div>
     <div class="periods"><button class="x" id="o-prev" aria-label="Vorige">‹</button><div class="lab" style="text-transform:capitalize">${esc(R.label)}</div><button class="x" id="o-next" aria-label="Volgende">›</button></div>
     <section class="day">
@@ -1224,6 +1410,7 @@ function viewOverzicht(el){
     <input class="inp" id="o-zoek" type="search" placeholder="Zoek in deze periode" value="${esc(S.zoek)}">
     ${Object.keys(byDay).length ? Object.keys(byDay).sort().reverse().slice(0,120).map(k => `<div class="card daygroup"><div class="dh"><span>${esc(cap(nlDag(k,{weekday:'short',day:'numeric',month:'long'})))}</span><span class="num">${eur(byDay[k].reduce((a,b)=>a+(+b.totaal||0),0))}</span></div><div class="list">${byDay[k].map(regRow).join('')}</div></div>`).join('') : `<div class="card"><div class="empty"><b>Geen registraties</b>In deze periode staat nog niks.</div></div>`}
   </div>`;
+  bindOmzetTabs(el);
   $$('[data-ps]', el).forEach(b => b.onclick = () => { S.periode.soort = b.dataset.ps; viewOverzicht(el); });
   $('#o-prev').onclick = () => { shiftPeriod(-1); viewOverzicht(el); };
   $('#o-next').onclick = () => { shiftPeriod(1); viewOverzicht(el); };
@@ -1231,6 +1418,118 @@ function viewOverzicht(el){
   const z = $('#o-zoek'); z.oninput = () => { S.zoek = z.value; const p = z.selectionStart; viewOverzicht(el); const z2 = $('#o-zoek'); z2.focus(); z2.setSelectionRange(p,p); };
   $('#o-export').onclick = () => openExport();
   bindRows(el);
+}
+
+/* ============ MIJN GELD: doel, kassa en loon ============ */
+const GELD_STD = {doelMaand:4451.85, doelJaar:53422, loonBank:1500, loonKas:1500};
+const geldIns = () => Object.assign({}, GELD_STD, S.data.instellingen.geld || {});
+const omzetTabs = () => `<div class="mode" role="group" aria-label="Omzet of mijn geld"><button data-ot="omzet" aria-pressed="${S.omzetTab !== 'geld'}">Omzet</button><button data-ot="geld" aria-pressed="${S.omzetTab === 'geld'}">Mijn geld</button></div>`;
+function bindOmzetTabs(el){ $$('[data-ot]', el).forEach(b => b.onclick = () => { S.omzetTab = b.dataset.ot; store.set('tims_omzettab', S.omzetTab); render(); window.scrollTo(0,0); }); }
+const maandOmzet = ym => totals(S.data.registraties.filter(r => r.datum.startsWith(ym)));
+const geldVan = (ym, soort) => r2(S.data.geld.filter(g => g.soort === soort && g.datum.startsWith(ym)).reduce((a,b) => a + (+b.bedrag||0), 0));
+const geldTijd = g => (g.tijd || g.datum + 'T00:00:00');
+/** Kassa: laatste telling + contant ontvangen daarna − wat eruit ging. */
+function kassa(){
+  const tel = S.data.geld.filter(g => g.soort === 'telling').sort((a,b) => geldTijd(b).localeCompare(geldTijd(a)))[0];
+  if (!tel) return null;
+  const contant = S.data.registraties.filter(r => r.betaal === 'contant' && r.datum > tel.datum).reduce((a,b) => a + (+b.totaal||0), 0);
+  const na = S.data.geld.filter(g => g.id !== tel.id && geldTijd(g) > geldTijd(tel));
+  const uit = na.filter(g => ['loonKas','afstorten','kasUit'].includes(g.soort)).reduce((a,b) => a + (+b.bedrag||0), 0);
+  const inn = na.filter(g => g.soort === 'kasIn').reduce((a,b) => a + (+b.bedrag||0), 0);
+  return {tel, hoort: r2(+tel.bedrag + contant - uit + inn)};
+}
+function viewGeld(el){
+  const G = geldIns(), nu = todayISO(), ym = nu.slice(0,7), y = nu.slice(0,4);
+  const m = maandOmzet(ym); const pct = G.doelMaand ? m.totaal / G.doelMaand : 0;
+  const recent = S.data.registraties.filter(r => r.type === 'trim' && r.datum >= addDays(nu, -90));
+  const gem = recent.length ? recent.reduce((a,b) => a + (+b.totaal||0), 0) / recent.length : 0;
+  const nog = Math.max(0, r2(G.doelMaand - m.totaal)), nHond = gem ? Math.ceil(nog / gem) : null;
+  const jaar = totals(S.data.registraties.filter(r => r.datum.startsWith(y))).totaal;
+  const maanden = Array.from({length:12}, (_,k) => `${y}-${pad(k+1)}`);
+  const gehaald = ymm => maandOmzet(ymm).totaal >= G.doelMaand;
+  let reeks = 0; for (let k = +ym.slice(5) - 2; k >= 0; k--){ if (gehaald(maanden[k])) reeks++; else break; }
+  if (pct >= 1) reeks++;
+  const per = maanden.map(x => ({x, t:maandOmzet(x).totaal})); const rec = per.reduce((a,b) => b.t > a.t ? b : a, per[0]);
+  const K = kassa();
+  const ms = [.25,.5,.75].map(f => `<span class="g-ms ${pct >= f ? '' : 'uit'}" style="left:${f*100}%">🦴</span>`).join('');
+  const lijst = maanden.slice(0, +ym.slice(5)).reverse().filter(x => maandOmzet(x).totaal || geldVan(x,'loonBank') || geldVan(x,'loonKas'));
+  el.innerHTML = `<div class="stack">
+    ${omzetTabs()}
+    <div class="goal"><div class="eyebrow">Doel ${esc(MAANDL[+ym.slice(5)-1].toLowerCase())}</div>
+      <div class="g-amt num">${eur(m.totaal)} <small>van ${eur(G.doelMaand)}</small></div>
+      <div class="g-line"><div class="g-fill" style="width:${Math.min(100, pct*100).toFixed(1)}%"></div>${ms}<span class="g-ms end">🏆</span>${DOGIMG ? `<img class="g-dog" alt="" style="left:${Math.min(100, pct*100).toFixed(1)}%" src="${DOGIMG}">` : ''}</div>
+      <div class="g-sub"><span><b>${Math.round(pct*100)}%</b> binnen</span><span>${nog ? `nog <b>${eur(nog)}</b>` : '<b>Doel gehaald! 🏆</b>'}</span></div>
+      ${nog && nHond ? `<div class="g-tip">🐾 Nog ongeveer <b>${nHond} ${nHond === 1 ? 'hond' : 'honden'}</b> (gemiddeld ${eur(gem)}) en je haalt je doel.<span id="g-gepland"></span></div>` : ''}
+    </div>
+    <div class="kpis"><div class="kpi"><div class="l">Contant</div><div class="v num">${eur(m.contant)}</div></div><div class="kpi"><div class="l">Tikkie</div><div class="v num">${eur(m.tikkie)}</div></div></div>
+    <div class="kpis" style="--cols:3"><div class="kpi"><div class="l">Jaardoel</div><div class="v num">${G.doelJaar ? Math.round(jaar / G.doelJaar * 100) : 0}%</div></div><div class="kpi"><div class="l">Reeks mnd</div><div class="v">🔥 ${reeks}</div></div><div class="kpi"><div class="l">Record</div><div class="v">⭐ ${esc(rec.t ? MAAND[+rec.x.slice(5)-1] : '–')}</div></div></div>
+    <div class="card pad stack" style="gap:10px"><div class="eyebrow">Kassa</div>
+      ${K ? `<div class="kpis"><div class="kpi"><div class="l">Hoort erin</div><div class="v num">${eur(K.hoort)}</div></div><div class="kpi"><div class="l">Laatst geteld</div><div class="v num">${eur(K.tel.bedrag)}</div></div></div>
+        <p class="hint" style="margin:0">Geteld op ${esc(nlDag(K.tel.datum,{day:'numeric',month:'short'}))}${K.tel.notitie ? ' · ' + esc(K.tel.notitie) : ''}. Daarna komt contant er vanzelf bij en gaat loon uit de kassa eraf.</p>`
+        : `<p class="hint" style="margin:0">Tel je kassa één keer. Daarna houdt de app bij wat erin hoort te zitten.</p>`}
+      <button class="btn btn-s btn-sm" id="g-tel">Kassa tellen</button></div>
+    <div class="card pad stack" style="gap:8px"><div class="eyebrow">Loon overmaken · ${esc(MAANDL[+ym.slice(5)-1].toLowerCase())}</div>
+      <div class="btnrow"><button class="btn btn-p btn-sm" id="g-lb" style="flex:1">${eur(G.loonBank)} van bank</button><button class="btn btn-p btn-sm" id="g-lk" style="flex:1">${eur(G.loonKas)} uit kassa</button></div>
+      <div class="btnrow"><button class="btn btn-s btn-sm" id="g-ander" style="flex:1">Ander bedrag of afstorten</button></div>
+      ${S.data.geld.filter(g => g.datum.startsWith(ym) && g.soort !== 'telling').length ? `<div class="card list">${S.data.geld.filter(g => g.datum.startsWith(ym) && g.soort !== 'telling').sort((a,b) => geldTijd(b).localeCompare(geldTijd(a))).map(g => `<button class="row" data-geld="${g.id}"><span class="av p">€</span><span class="main"><span class="t1">${esc(GELDSOORT[g.soort] || g.soort)}</span><span class="t2">${esc(nlDag(g.datum,{day:'numeric',month:'short'}))}${g.notitie ? ' · ' + esc(g.notitie) : ''}</span></span><span class="amt num">${eur(g.bedrag)}</span></button>`).join('')}</div>` : ''}</div>
+    <div class="sec-h"><h2>Per maand</h2><button class="btn btn-s btn-sm" id="g-doel">Doel aanpassen</button></div>
+    <div class="card pad"><div class="ypath">${maanden.map((x,k) => { const t = maandOmzet(x).totaal; const cls = x === ym ? (t >= G.doelMaand ? 'ok' : 'nu') : x < ym && t >= G.doelMaand ? 'ok' : '';
+      return `<span class="ym ${cls}">${MAAND[k]}<i>${cls === 'ok' ? '✓' : ''}</i></span>`; }).join('')}</div></div>
+    <div class="card">${lijst.map(x => { const t = maandOmzet(x); const ok = t.totaal >= G.doelMaand;
+      return `<div class="mrow"><div class="mh"><b>${esc(MAANDL[+x.slice(5)-1])} ${x.slice(0,4)}</b><span class="${ok ? 'ok' : 'nok'}">${ok ? '✓ doel gehaald' : Math.round(t.totaal / (G.doelMaand || 1) * 100) + '% van doel'}</span></div>
+        <div class="mg"><span>Contant</span><span class="num">${eur(t.contant)}</span><span>Tikkie</span><span class="num">${eur(t.tikkie)}</span><span><b>Totaal</b></span><span class="num"><b>${eur(t.totaal)}</b></span><span>Overgemaakt</span><span class="num">${eur(geldVan(x,'loonBank'))} bank · ${eur(geldVan(x,'loonKas'))} kas</span></div></div>`; }).join('') || '<div class="empty">Nog geen gegevens.</div>'}</div>
+  </div>`;
+  bindOmzetTabs(el);
+  $('#g-tel').onclick = () => kassaTellen(K);
+  $('#g-lb').onclick = () => geldRegel({soort:'loonBank', bedrag:G.loonBank});
+  $('#g-lk').onclick = () => geldRegel({soort:'loonKas', bedrag:G.loonKas});
+  $('#g-ander').onclick = () => geldRegel({soort:'loonBank', bedrag:''});
+  $('#g-doel').onclick = doelAanpassen;
+  $$('[data-geld]', el).forEach(b => b.onclick = () => geldRegel(S.data.geld.find(g => g.id === b.dataset.geld)));
+  // hoeveel honden staan er nog gepland deze maand?
+  if (nog && nHond){ const eind = isoOf(new Date(+y, +ym.slice(5), 1)); api.agenda(new Date().toISOString(), parseISO(eind).toISOString()).then(evs => { const n = verrijk(evs).filter(e => e.hondId && !regVoorEv(e)).length; const g = $('#g-gepland'); if (g && n) g.innerHTML = ` Er staan er nog <b>${n}</b> gepland.`; }).catch(() => {}); }
+}
+const GELDSOORT = {loonBank:'Loon van de bank', loonKas:'Loon uit de kassa', afstorten:'Kassa naar de bank', kasUit:'Uit de kassa (overig)', kasIn:'In de kassa (overig)', telling:'Kassa geteld'};
+function geldRegel(g){
+  const nieuw = !g.id; const G0 = {id:uid('g'), datum:todayISO(), tijd:new Date().toISOString(), soort:'loonBank', bedrag:'', notitie:''};
+  const x = Object.assign({}, G0, g);
+  sheet(nieuw ? 'Geld vastleggen' : 'Geldregel', `
+    <div class="fld"><span class="lbl">Wat</span><div class="chips">${['loonBank','loonKas','afstorten','kasUit','kasIn'].map(k => `<button class="chip" data-gs="${k}" aria-pressed="${x.soort === k}">${GELDSOORT[k]}</button>`).join('')}</div></div>
+    <div class="grid2"><div class="fld"><label for="g-bedrag">Bedrag</label><input class="inp num" id="g-bedrag" inputmode="decimal" value="${x.bedrag === '' ? '' : String(x.bedrag).replace('.', ',')}" placeholder="0,00"></div><div class="fld"><label for="g-datum">Datum</label><input class="inp" id="g-datum" type="date" value="${x.datum}"></div></div>
+    <div class="fld"><label for="g-not">Notitie (mag leeg)</label><input class="inp" id="g-not" value="${esc(x.notitie || '')}"></div>
+    ${nieuw ? '' : `<button class="btn btn-d" id="g-del">Verwijderen</button>`}`,
+    `<button class="btn btn-p" id="g-save" style="flex:1">Opslaan</button>`);
+  const b = $('.sheet');
+  $$('[data-gs]', b).forEach(c => c.onclick = () => { x.soort = c.dataset.gs; $$('[data-gs]', b).forEach(y => y.setAttribute('aria-pressed', String(y.dataset.gs === x.soort))); });
+  const dl = $('#g-del', b); if (dl) dl.onclick = () => { Q.push('deleteGeld', {id:x.id}); closeSheet(); toast('Verwijderd'); render(); };
+  $('#g-save', b).onclick = () => {
+    const v = +String($('#g-bedrag').value).replace(/\./g, '').replace(',', '.'); if (!(v > 0)) return toast('Vul een bedrag in');
+    const d = $('#g-datum').value; if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return toast('Kies een datum');
+    x.bedrag = r2(v); x.datum = d; x.notitie = $('#g-not').value.trim(); if (nieuw && d !== todayISO()) x.tijd = d + 'T12:00:00';
+    Q.push('saveGeld', x); closeSheet(); toast(`${GELDSOORT[x.soort]}: ${eur(x.bedrag)} ✓`); render();
+  };
+}
+function kassaTellen(K){
+  sheet('Kassa tellen', `${K ? `<div class="kpi"><div class="l">Hoort erin</div><div class="v num">${eur(K.hoort)}</div></div>` : ''}
+    <div class="fld"><label for="k-tel">Hoeveel zit er nu in de kassa?</label><input class="inp num" id="k-tel" inputmode="decimal" placeholder="0,00" style="font-size:26px;font-weight:800"></div>
+    <div id="k-vs"></div><p class="hint" style="margin:0">Vanaf dit bedrag houdt de app de kassa weer bij.</p>`,
+    `<button class="btn btn-p" id="k-save" style="flex:1">Opslaan</button>`);
+  const inp = $('#k-tel'); const lees = () => +String(inp.value).replace(/\./g, '').replace(',', '.');
+  inp.oninput = () => { const v = lees(); $('#k-vs').innerHTML = K && inp.value && isFinite(v) ? (Math.abs(v - K.hoort) < 0.01 ? `<div class="card pad" style="color:var(--ok);font-weight:800">✓ Klopt precies</div>` : `<div class="alert w" style="border-radius:12px">Verschil: ${eur(Math.abs(v - K.hoort))} ${v < K.hoort ? 'minder' : 'meer'}</div>`) : ''; };
+  $('#k-save').onclick = () => { const v = lees(); if (!inp.value || !isFinite(v) || v < 0) return toast('Vul het getelde bedrag in');
+    Q.push('saveGeld', {id:uid('g'), datum:todayISO(), tijd:new Date().toISOString(), soort:'telling', bedrag:r2(v), notitie: K && Math.abs(v - K.hoort) >= 0.01 ? `verwacht ${eur(K.hoort)}` : ''});
+    closeSheet(); toast('Kassa geteld ✓'); render(); };
+}
+function doelAanpassen(){
+  const G = geldIns(); const f = n => String(n).replace('.', ',');
+  sheet('Mijn doel', `<div class="fld"><label for="d-m">Wat wil je per maand verdienen?</label><input class="inp num" id="d-m" inputmode="decimal" value="${f(G.doelMaand)}"></div>
+    <div class="fld"><label for="d-j">Per jaar</label><input class="inp num" id="d-j" inputmode="decimal" value="${f(G.doelJaar)}"></div>
+    <div class="grid2"><div class="fld"><label for="d-lb">Vast loon van bank</label><input class="inp num" id="d-lb" inputmode="decimal" value="${f(G.loonBank)}"></div><div class="fld"><label for="d-lk">Vast loon uit kassa</label><input class="inp num" id="d-lk" inputmode="decimal" value="${f(G.loonKas)}"></div></div>
+    <p class="hint" style="margin:0">Het doel telt alles wat binnenkomt: trimbeurten en verkoop.</p>`, `<button class="btn btn-p" id="d-save" style="flex:1">Opslaan</button>`);
+  $('#d-save').onclick = () => { const n = id => +String($(id).value).replace(/\./g, '').replace(',', '.');
+    const g = {doelMaand:n('#d-m'), doelJaar:n('#d-j'), loonBank:n('#d-lb'), loonKas:n('#d-lk')};
+    if (Object.values(g).some(v => !isFinite(v) || v < 0)) return toast('Controleer de bedragen');
+    const ins = JSON.parse(JSON.stringify(S.data.instellingen)); ins.geld = g; Q.push('saveInstellingen', {obj: ins}); closeSheet(); toast('Doel opgeslagen ✓'); render(); };
 }
 const PAYS_ALL = ['contant','tikkie','pin'];
 function omschrijving(r){
@@ -1682,7 +1981,8 @@ const STANDAARD = {
   diensten: [{naam:'Complete trimbeurt', omschrijving:'Wassen, föhnen, knippen of trimmen, nagels en oren', vanaf:65},{naam:'Doodle-beurt', omschrijving:'Voor krullende en wollige vachten', vanaf:85},{naam:'Puppybeurt', omschrijving:'Rustig kennismaken met de salon', vanaf:50},{naam:'Tussenbeurt', omschrijving:'Snuitje, voetjes en billen bijwerken', vanaf:25},{naam:'Nagels knippen', omschrijving:'Zonder afspraak in overleg', vanaf:7.5}],
 };
 function normaliseer(d){
-  d = d || {}; d.honden ||= []; d.registraties ||= []; d.producten ||= []; d.bestellingen ||= []; d.aanvragen ||= [];
+  d = d || {}; d.honden ||= []; d.registraties ||= []; d.producten ||= []; d.bestellingen ||= []; d.aanvragen ||= []; d.geld ||= [];
+  d.geld.forEach(g => { g.datum = String(g.datum).slice(0,10); g.bedrag = +g.bedrag || 0; });
   d.instellingen = Object.assign(JSON.parse(JSON.stringify(STANDAARD)), d.instellingen || {});
   d.instellingen.salon = Object.assign({}, STANDAARD.salon, d.instellingen.salon || {});
   const bool = (v, def) => v === '' || v == null ? def : (v === true || v === 'TRUE' || v === 'true');
